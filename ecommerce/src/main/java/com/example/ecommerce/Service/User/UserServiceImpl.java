@@ -15,7 +15,7 @@ import com.example.ecommerce.Model.Products;
 import com.example.ecommerce.Model.Users;
 import com.example.ecommerce.Repository.ProductRepo;
 import com.example.ecommerce.Repository.UserRepo;
-import com.example.ecommerce.Service.Admin.EmailService;
+import com.example.ecommerce.Service.EmailService;
 
 @Service
 public class UserServiceImpl implements UserInterface {

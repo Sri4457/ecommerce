@@ -1,4 +1,4 @@
-package com.example.ecommerce.Service.Admin;
+package com.example.ecommerce.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;

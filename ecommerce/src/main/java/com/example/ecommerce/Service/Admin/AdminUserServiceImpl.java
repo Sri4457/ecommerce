@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.ecommerce.Model.Users;
 import com.example.ecommerce.Repository.UserRepo;
+import com.example.ecommerce.Service.EmailService;
 
 @Service
 public class AdminUserServiceImpl implements AdminUserInterface{
