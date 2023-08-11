@@ -62,13 +62,13 @@ public class AdminController {
 	@GetMapping("/admin/product/viewall")
 	public ResponseEntity<List<Products>> getAllProducts()
 	{
-		return ResponseEntity.ok(pinter.viewAll());
+		return new ResponseEntity<List<Products>>(pinter.viewAll(),HttpStatus.OK);
 	}
 	
 	@GetMapping("/admin/product/viewbyname")
 	public ResponseEntity<Products> viewByName(@RequestBody Products p)
 	{
-		return ResponseEntity.ok(pinter.viewByName(p.getName()));
+		return new ResponseEntity<Products>(pinter.viewByName(p.getName()),HttpStatus.OK);
 	}
 	@PutMapping("/admin/product/update")
 	public ResponseEntity<Response> UpdateProduct(@RequestBody ProductDto p)
@@ -118,24 +118,24 @@ public class AdminController {
 	@GetMapping("/admin/user/viewall")
 	public ResponseEntity<List<Users>> viewAllUser()
 	{
-		return ResponseEntity.ok(uinter.viewAllUsers());
+		return new ResponseEntity<List<Users>>(uinter.viewAllUsers(),HttpStatus.OK);
 	}
 	@GetMapping("/admin/user/viewnewusers")
 	public ResponseEntity<List<Users>> viewNewUsers()
 	{
-		return ResponseEntity.ok(uinter.viewNewUsersList());
+		return new ResponseEntity<List<Users>>(uinter.viewNewUsersList(),HttpStatus.OK);
 	}
 	
 	@GetMapping("/admin/user/viewunblockusers")
 	public ResponseEntity<List<Users>> viewUnblockUsers()
 	{
-		return ResponseEntity.ok(uinter.viewBlockUsersList());
+		return new ResponseEntity<List<Users>>(uinter.viewBlockUsersList(),HttpStatus.OK);
 	}
 	
 	@GetMapping("/admin/viewuserorders")
 	public ResponseEntity<List<Users>> getUserOrders()
 	{
-		return ResponseEntity.ok(uinter.getUsersOrdered());
+		return new ResponseEntity<List<Users>>(uinter.getUsersOrdered(),HttpStatus.OK);
 	}
 	
 }

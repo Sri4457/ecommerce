@@ -45,25 +45,25 @@ public class UserController {
 	@GetMapping("/viewProducts")
 	private ResponseEntity<List<Products>> viewAll()
 	{
-		return ResponseEntity.ok(pinter.viewAll());
+		return new ResponseEntity<List<Products>>(pinter.viewAll(),HttpStatus.OK);
 	}
 	
 	@GetMapping("/product/viewbyname/{product_name}")
 	public ResponseEntity<Products> viewByName(@PathVariable String product_name)
 	{
-		return ResponseEntity.ok(pinter.viewByName(product_name));
+		return new ResponseEntity<Products>(pinter.viewByName(product_name),HttpStatus.OK);
 	}
 	
 	@PostMapping("/submitcart/{username}")
 	public ResponseEntity<List<Response>> submitCart(@PathVariable("username") String uname,@RequestBody List<ProductDto> prods)
 	{
 		Users u=uinter.getByUname(uname);
-		return ResponseEntity.ok(uinter.submitProducts(u, prods));
+		return new ResponseEntity<List<Response>>(uinter.submitProducts(u, prods),HttpStatus.OK);
 	}
 	@GetMapping("/orders/vieworders/{uname}")
 	public ResponseEntity<List<OrderDto>> viewOrders(@PathVariable String uname)
 	{
 		List<OrderDto> list=uinter.getOrderByUname(uname);
-		return ResponseEntity.ok(list);
+		return new ResponseEntity<List<OrderDto>>(list,HttpStatus.OK);
 	}
 }
