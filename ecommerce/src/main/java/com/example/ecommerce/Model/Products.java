@@ -1,5 +1,7 @@
 package com.example.ecommerce.Model;
 
+import java.sql.Date;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -13,7 +15,7 @@ public class Products {
 	@GeneratedValue(strategy= GenerationType.IDENTITY)
 	private long id;
 	
-	@Column(name="name" ,nullable=false, unique=true)
+	@Column(name="name",nullable=false)
 	private String name;
 	
 	@Column(name="count",nullable=false)
@@ -21,15 +23,18 @@ public class Products {
 	
 	@Column(name="price", nullable=false)
 	private double price;
+	
+	@Column(name="date",nullable=false)
+	private Date date;
 
 	
-	public Products( String name, int count, double price) {
+	public Products( String name, int count, double price, Date date) {
 		super();
 		this.name = name;
 		this.count = count;
 		this.price = price;
+		this.date = date;
 	}
-
 	public Products()
 	{
 		
@@ -64,6 +69,12 @@ public class Products {
 
 	public void setPrice(double price) {
 		this.price = price;
+	}
+	public Date getDate() {
+		return date;
+	}
+	public void setDate(Date date) {
+		this.date = date;
 	}
 	
 	

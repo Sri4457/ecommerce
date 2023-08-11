@@ -1,5 +1,6 @@
 package com.example.ecommerce.Service.Products;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ public class ProductServiceImpl implements ProductInterface{
 	public boolean addProduct(Products p) {
 		boolean b=false;
 		try {
+			p.setDate(java.sql.Date.valueOf(LocalDate.now()));
 			prepo.save(p);
 			b=true;
 		}

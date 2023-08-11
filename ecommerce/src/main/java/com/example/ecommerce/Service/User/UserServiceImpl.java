@@ -36,7 +36,7 @@ public class UserServiceImpl implements UserInterface {
 		{
 			urepo.save(u);
 			String message="Thank you for choosing our ecommerce website. Thanks for Registering";
-			es.notifyUser(u.getEmail(), message);
+			es.notifyUser(u.getEmail(), message,"Welcoming Mail");
 			b=true;
 		}
 		catch(Exception e)
@@ -88,32 +88,43 @@ public class UserServiceImpl implements UserInterface {
 	}
 
 	@Override
-	public List<Response> submitProducts(Users s, List<ProductDto> list) {
+	public List<Response> submitProducts(String s, List<ProductDto> list) {
 		List<Response> res=new ArrayList<>();
+		Users u=urepo.findByUsername(s);
 		try
 		{
-			for(int i=0;i<list.size();i++)
+			if(!u.getStatus().equalsIgnoreCase("blocked")) 
 			{
-				Orders o=new Orders();
-				o.setStatus("ordered");
-				o.setQuantity(list.get(i).getCount());
-				o.setProduct_id(prepo.findByName(list.get(i).getName()).getId());
-				o.setTime(java.sql.Date.valueOf(LocalDate.now()));
-				List<Orders> l=s.getOrders();
-				l.add(o);
-				s.setOrders(l);
-				if(checkProducts(list.get(i)))
+				String msg="";
+				for(int i=0;i<list.size();i++)
 				{
-					Response r=new Response(false,"The Product with name "+list.get(i).getName()+" is ordered");
-					updateProducts(list.get(i));
-					urepo.save(s);
-					res.add(r);
+					Orders o=new Orders();
+					o.setStatus("ordered");
+					o.setQuantity(list.get(i).getCount());
+					o.setProduct_id(prepo.findByName(list.get(i).getName()).getId());
+					o.setTime(java.sql.Date.valueOf(LocalDate.now()));
+					List<Orders> l=u.getOrders();
+					l.add(o);
+					u.setOrders(l);
+					if(checkProducts(list.get(i)))
+					{
+						Response r=new Response(false,"The Product with name "+list.get(i).getName()+" is ordered");
+						updateProducts(list.get(i));
+						msg+="The Product Name "+prepo.findById(o.getProduct_id()).get().getName()+" in successfully ordered.\n";
+						urepo.save(u);
+						res.add(r);
+					}
+					else
+					{
+						Response r=new Response(true,"The Product with name "+list.get(i).getName()+" is not ordered as the products are not avaliable to your provided Quantity");
+						res.add(r);
+					}
 				}
-				else
-				{
-					Response r=new Response(true,"The Product with name "+list.get(i).getName()+" is not ordered as the products are not avaliable to your provided Quantity");
-					res.add(r);
-				}
+				es.notifyUser(u.getEmail(), msg, "Ordered Mail");
+			}
+			else {
+				Response response=new Response(true,"Still you are not released by Admin" );
+				res.add(response);
 			}
 		}
 		catch(Exception e)
@@ -144,6 +155,7 @@ public class UserServiceImpl implements UserInterface {
 		for(int i=0;i<list.size();i++)
 		{
 			OrderDto obj=new OrderDto();
+			obj.setId(i);
 			obj.setPname(prepo.findById(list.get(i).getProduct_id()).get().getName());
 			obj.setQty(list.get(i).getQuantity());
 			obj.setPrice(prepo.findById(list.get(i).getProduct_id()).get().getPrice());

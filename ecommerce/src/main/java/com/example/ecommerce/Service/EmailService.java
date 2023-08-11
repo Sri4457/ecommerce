@@ -1,6 +1,7 @@
 package com.example.ecommerce.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -11,15 +12,15 @@ public class EmailService {
     @Autowired
     private JavaMailSender javaMailSender;
 
-    static private final String fromemail="ecommerceweb4457@gmail.com";
+    @Value("${spring.mail.username}") private String sender;;
 
-    public void notifyUser(String email, String message)
+    public void notifyUser(String email, String message,String sub)
     {
         try {
             SimpleMailMessage mail = new SimpleMailMessage();
             mail.setTo(email);
-            mail.setFrom(fromemail);
-            mail.setSubject("Welcoming Mail");
+            mail.setFrom(sender);
+            mail.setSubject(sub);
             mail.setText(message);
             javaMailSender.send(mail);
         }

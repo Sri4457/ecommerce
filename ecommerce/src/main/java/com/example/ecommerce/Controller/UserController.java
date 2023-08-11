@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.ecommerce.Dto.OrderDto;
@@ -20,6 +21,7 @@ import com.example.ecommerce.Service.Products.ProductInterface;
 import com.example.ecommerce.Service.User.UserInterface;
 
 @RestController()
+@RequestMapping("/user") 
 public class UserController {
 
 	@Autowired
@@ -57,8 +59,7 @@ public class UserController {
 	@PostMapping("/submitcart/{username}")
 	public ResponseEntity<List<Response>> submitCart(@PathVariable("username") String uname,@RequestBody List<ProductDto> prods)
 	{
-		Users u=uinter.getByUname(uname);
-		return new ResponseEntity<List<Response>>(uinter.submitProducts(u, prods),HttpStatus.OK);
+		return new ResponseEntity<List<Response>>(uinter.submitProducts(uname, prods),HttpStatus.OK);
 	}
 	@GetMapping("/orders/vieworders/{uname}")
 	public ResponseEntity<List<OrderDto>> viewOrders(@PathVariable String uname)

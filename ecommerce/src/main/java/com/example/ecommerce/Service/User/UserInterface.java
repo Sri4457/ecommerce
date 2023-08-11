@@ -15,6 +15,7 @@ public interface UserInterface {
 	public Products viewProductByName(String name);
 	public boolean UpdateProfile(Users u);
 	public Users getByUname(String uname);
-	public List<Response> submitProducts(Users s,List<ProductDto> list);
+	public List<Response> submitProducts(String s,List<ProductDto> list);
 	public List<OrderDto> getOrderByUname(String uname);
+	
 }

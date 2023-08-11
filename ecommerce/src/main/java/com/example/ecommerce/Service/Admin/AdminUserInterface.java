@@ -13,5 +13,7 @@ public interface AdminUserInterface {
 	public List<Users> viewAllUsers();
 	public List<Users> viewNewUsersList();
 	public List<Users> getUsersOrdered();
-	
+//	public boolean deleteOrders();
+	public boolean updateOrders(String uname,List<String> pname);
+	public boolean updateUser(String u);
 }

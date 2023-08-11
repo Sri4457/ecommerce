@@ -1,5 +1,6 @@
 package com.example.ecommerce.Controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.ecommerce.Service.Admin.AdminUserInterface;
@@ -20,16 +22,17 @@ import com.example.ecommerce.Dto.Response;
 import com.example.ecommerce.Model.Products;
 import com.example.ecommerce.Model.Users;
 
-@RestController("")
+@RestController()
+@RequestMapping("/admin") 
 public class AdminController {
 
 	@Autowired
-	AdminUserInterface uinter;
+	AdminUserInterface auinter;
 	
 	@Autowired
 	ProductInterface pinter;
 	
-	@PostMapping("/admin/product/add")
+	@PostMapping("/product/add")
 	public ResponseEntity<Response> addProduct(@RequestBody Products p)
 	{
 		Response response=null;
@@ -44,8 +47,8 @@ public class AdminController {
 		return new ResponseEntity<Response>(response,HttpStatus.OK);
 	}
 	
-	@DeleteMapping("/admin/product/delete/{name}")
-	public ResponseEntity<Response> deleteProduct(@PathVariable int qty)
+	@DeleteMapping("/product/delete/{qty}")
+	public ResponseEntity<Response> deleteProduct(@PathVariable("qty") int qty)
 	{
 		Response response=null;
 		boolean b=pinter.deleteProduct(qty);
@@ -59,18 +62,18 @@ public class AdminController {
 		return new ResponseEntity<Response>(response,HttpStatus.OK);
 	} 
 	
-	@GetMapping("/admin/product/viewall")
+	@GetMapping("/product/viewall")
 	public ResponseEntity<List<Products>> getAllProducts()
 	{
 		return new ResponseEntity<List<Products>>(pinter.viewAll(),HttpStatus.OK);
 	}
 	
-	@GetMapping("/admin/product/viewbyname")
+	@GetMapping("/product/viewbyname")
 	public ResponseEntity<Products> viewByName(@RequestBody Products p)
 	{
 		return new ResponseEntity<Products>(pinter.viewByName(p.getName()),HttpStatus.OK);
 	}
-	@PutMapping("/admin/product/update")
+	@PutMapping("/product/update")
 	public ResponseEntity<Response> UpdateProduct(@RequestBody ProductDto p)
 	{
 		Response response;
@@ -85,11 +88,12 @@ public class AdminController {
 		return new ResponseEntity<Response>(response,HttpStatus.OK);
 	}
 	
-	@PostMapping("/admin/user/add")
+	
+	@PostMapping("/user/add")
 	public ResponseEntity<Response> addUser(@RequestBody Users u)
 	{
 		Response response=null;
-		boolean b=uinter.addUser(u);
+		boolean b=auinter.addUser(u);
 		if(b)
 		{
 			response=new Response(false,"User added Successfully");
@@ -100,11 +104,11 @@ public class AdminController {
 		return new ResponseEntity<Response>(response,HttpStatus.OK);
 	} 
 	
-	@DeleteMapping("/admin/user/delete")
+	@DeleteMapping("/user/delete")
 	public ResponseEntity<Response> deleteUser(@RequestBody Users u)
 	{
 		Response response=null;
-		boolean b=uinter.deleteUser(u.getUsername());
+		boolean b=auinter.deleteUser(u.getUsername());
 		if(b)
 		{
 			response=new Response(false,"User deleted Successfully");
@@ -115,27 +119,59 @@ public class AdminController {
 		return new ResponseEntity<Response>(response,HttpStatus.OK);
 	} 
 	
-	@GetMapping("/admin/user/viewall")
+	@PutMapping("/user/update/{uname}")
+	public ResponseEntity<Response> updateUser(@PathVariable String uname)
+	{
+		Response response=null;
+		boolean b=auinter.updateUser(uname);
+		if(b)
+		{
+			response=new Response(false,"User Released Successfully");
+		}
+		else {
+			response=new Response(true,"something went wrong");
+		}
+		return new ResponseEntity<Response>(response,HttpStatus.OK);
+	} 
+	
+	@GetMapping("/user/viewall")
 	public ResponseEntity<List<Users>> viewAllUser()
 	{
-		return new ResponseEntity<List<Users>>(uinter.viewAllUsers(),HttpStatus.OK);
+		return new ResponseEntity<List<Users>>(auinter.viewAllUsers(),HttpStatus.OK);
 	}
-	@GetMapping("/admin/user/viewnewusers")
+	@GetMapping("/user/viewnewusers")
 	public ResponseEntity<List<Users>> viewNewUsers()
 	{
-		return new ResponseEntity<List<Users>>(uinter.viewNewUsersList(),HttpStatus.OK);
+		return new ResponseEntity<List<Users>>(auinter.viewNewUsersList(),HttpStatus.OK);
 	}
 	
-	@GetMapping("/admin/user/viewunblockusers")
+	@GetMapping("/user/viewunblockusers")
 	public ResponseEntity<List<Users>> viewUnblockUsers()
 	{
-		return new ResponseEntity<List<Users>>(uinter.viewBlockUsersList(),HttpStatus.OK);
+		return new ResponseEntity<List<Users>>(auinter.viewBlockUsersList(),HttpStatus.OK);
 	}
 	
-	@GetMapping("/admin/viewuserorders")
+	@GetMapping("/user/viewuserorders")
 	public ResponseEntity<List<Users>> getUserOrders()
 	{
-		return new ResponseEntity<List<Users>>(uinter.getUsersOrdered(),HttpStatus.OK);
+		return new ResponseEntity<List<Users>>(auinter.getUsersOrdered(),HttpStatus.OK);
 	}
 	
+	@PutMapping("/orders/updateorder/{uname}")
+	public ResponseEntity<Response> updateOrders(@PathVariable("uname") String uname,@RequestBody List<ProductDto> p)
+	{
+		List<String> names=new ArrayList<>();
+		Response response=null;
+		for(ProductDto pdto:p)
+		{
+			names.add(pdto.getName());
+		}
+		boolean b=auinter.updateOrders(uname, names);
+		if(b==false)
+			response=new Response(true,"Something Went Wrong");
+		else
+			response=new Response(false,"Updation Done");
+		return new ResponseEntity<>(response,HttpStatus.OK);
+		
+	}
 }
