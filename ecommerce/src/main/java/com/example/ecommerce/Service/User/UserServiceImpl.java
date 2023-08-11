@@ -96,6 +96,7 @@ public class UserServiceImpl implements UserInterface {
 			if(!u.getStatus().equalsIgnoreCase("blocked")) 
 			{
 				String msg="";
+				double price=0;
 				for(int i=0;i<list.size();i++)
 				{
 					Orders o=new Orders();
@@ -103,6 +104,7 @@ public class UserServiceImpl implements UserInterface {
 					o.setQuantity(list.get(i).getCount());
 					o.setProduct_id(prepo.findByName(list.get(i).getName()).getId());
 					o.setTime(java.sql.Date.valueOf(LocalDate.now()));
+					o.setCost(o.getQuantity()*(prepo.findByName(list.get(i).getName()).getPrice()));
 					List<Orders> l=u.getOrders();
 					l.add(o);
 					u.setOrders(l);
@@ -112,6 +114,7 @@ public class UserServiceImpl implements UserInterface {
 						updateProducts(list.get(i));
 						msg+="The Product Name "+prepo.findById(o.getProduct_id()).get().getName()+" in successfully ordered.\n";
 						urepo.save(u);
+						price+=o.getCost();
 						res.add(r);
 					}
 					else
@@ -120,7 +123,13 @@ public class UserServiceImpl implements UserInterface {
 						res.add(r);
 					}
 				}
-				es.notifyUser(u.getEmail(), msg, "Ordered Mail");
+				if(msg.length()==0)
+					es.notifyUser(u.getEmail(), "Some Thing Went wrong while ordering please try again", "Notifying Mail");
+				else
+				{
+					msg+=" With the Total Cost is : "+price;
+					es.notifyUser(u.getEmail(), msg, "Ordered Mail");
+				}
 			}
 			else {
 				Response response=new Response(true,"Still you are not released by Admin" );

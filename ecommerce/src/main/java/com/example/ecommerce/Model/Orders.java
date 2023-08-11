@@ -27,15 +27,18 @@ public class Orders {
 	
 	@Column(name="quantity")
 	private int quantity;
-
 	
-	public Orders(long id, Date time, String status, long product_id, int quantity) {
+	@Column(name="cost")
+	private double cost;
+	
+	
+	public Orders(Date time, String status, long product_id, int quantity, double cost) {
 		super();
-		this.id = id;
 		this.time = time;
 		this.status = status;
 		this.product_id = product_id;
 		this.quantity = quantity;
+		this.cost = cost;
 	}
 	public Orders() {
 		
@@ -79,7 +82,12 @@ public class Orders {
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
 	}
-	
+	public double getCost() {
+		return cost;
+	}
+	public void setCost(double cost) {
+		this.cost = cost;
+	}
 	
 	
 	
