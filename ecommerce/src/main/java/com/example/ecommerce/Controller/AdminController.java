@@ -62,17 +62,7 @@ public class AdminController {
 		return new ResponseEntity<Response>(response,HttpStatus.OK);
 	} 
 	
-	@GetMapping("/product/viewall")
-	public ResponseEntity<List<Products>> getAllProducts()
-	{
-		return new ResponseEntity<List<Products>>(pinter.viewAll(),HttpStatus.OK);
-	}
 	
-	@GetMapping("/product/viewbyname")
-	public ResponseEntity<Products> viewByName(@RequestBody Products p)
-	{
-		return new ResponseEntity<Products>(pinter.viewByName(p.getName()),HttpStatus.OK);
-	}
 	@PutMapping("/product/update")
 	public ResponseEntity<Response> UpdateProduct(@RequestBody ProductDto p)
 	{
@@ -89,20 +79,7 @@ public class AdminController {
 	}
 	
 	
-	@PostMapping("/user/add")
-	public ResponseEntity<Response> addUser(@RequestBody Users u)
-	{
-		Response response=null;
-		boolean b=auinter.addUser(u);
-		if(b)
-		{
-			response=new Response(false,"User added Successfully");
-		}
-		else {
-			response=new Response(true,"something went wrong");
-		}
-		return new ResponseEntity<Response>(response,HttpStatus.OK);
-	} 
+	
 	
 	@DeleteMapping("/user/delete")
 	public ResponseEntity<Response> deleteUser(@RequestBody Users u)

@@ -69,15 +69,19 @@ public class UserServiceImpl implements UserInterface {
 		if(u.getPassword()!=null)
 			user.setPassword(u.getPassword());
 		boolean b=false;
+		String msg=null;
 		try
 		{
+			msg="Your Pofile is updated successfully";
 			urepo.save(u);
 			b=true;
 		}
 		catch(Exception e)
 		{
+			msg="Something Went Wrong";
 			System.out.println(e);
 		}
+		es.notifyUser(u.getEmail(), msg, "Profile Update Mail");
 		return b;
 	}
 

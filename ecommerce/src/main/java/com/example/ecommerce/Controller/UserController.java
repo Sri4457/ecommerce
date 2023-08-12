@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.ecommerce.Dto.OrderDto;
 import com.example.ecommerce.Dto.ProductDto;
 import com.example.ecommerce.Dto.Response;
-import com.example.ecommerce.Model.Products;
 import com.example.ecommerce.Model.Users;
 import com.example.ecommerce.Service.Products.ProductInterface;
 import com.example.ecommerce.Service.User.UserInterface;
@@ -30,31 +30,6 @@ public class UserController {
 	@Autowired
 	ProductInterface pinter;
 	
-	@PostMapping("/register")
-	private ResponseEntity<Response> addUsers(@RequestBody Users users)
-	{
-		Response response;
-		boolean b=uinter.register(users);
-		if(b)
-		{
-			response=new Response(false,"user registered successfull");
-		}
-		else
-			response=new Response(true,"Something Went Wrong");
-		return new ResponseEntity<Response>(response,HttpStatus.OK);
-	}
-	
-	@GetMapping("/viewProducts")
-	private ResponseEntity<List<Products>> viewAll()
-	{
-		return new ResponseEntity<List<Products>>(pinter.viewAll(),HttpStatus.OK);
-	}
-	
-	@GetMapping("/product/viewbyname/{product_name}")
-	public ResponseEntity<Products> viewByName(@PathVariable String product_name)
-	{
-		return new ResponseEntity<Products>(pinter.viewByName(product_name),HttpStatus.OK);
-	}
 	
 	@PostMapping("/submitcart/{username}")
 	public ResponseEntity<List<Response>> submitCart(@PathVariable("username") String uname,@RequestBody List<ProductDto> prods)
@@ -66,5 +41,19 @@ public class UserController {
 	{
 		List<OrderDto> list=uinter.getOrderByUname(uname);
 		return new ResponseEntity<List<OrderDto>>(list,HttpStatus.OK);
+	}
+	@PutMapping("/update")
+	public ResponseEntity<Response> updateUser(@RequestBody Users u)
+	{
+		boolean b=uinter.UpdateProfile(u);
+		Response response=null;
+		if(b)
+		{
+			response=new Response(false,"Updated Successfully");
+		}
+		else {
+			response=new Response(true,"Something Went Wrong");
+		}
+		return new ResponseEntity<Response>(response,HttpStatus.OK);
 	}
 }
