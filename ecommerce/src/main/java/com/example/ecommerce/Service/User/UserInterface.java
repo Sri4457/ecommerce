@@ -2,7 +2,7 @@ package com.example.ecommerce.Service.User;
 
 import java.util.List;
 
-import com.example.ecommerce.Dto.OrderDto;
+import com.example.ecommerce.Dto.CommonDto;
 import com.example.ecommerce.Dto.ProductDto;
 import com.example.ecommerce.Dto.Response;
 import com.example.ecommerce.Model.Products;
@@ -16,6 +16,6 @@ public interface UserInterface {
 	public boolean UpdateProfile(Users u);
 	public Users getByUname(String uname);
 	public List<Response> submitProducts(String s,List<ProductDto> list);
-	public List<OrderDto> getOrderByUname(String uname);
+	public List<CommonDto> getOrderByUname(String uname);
 	
 }

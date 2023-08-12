@@ -2,6 +2,8 @@ package com.example.ecommerce.Service.Admin;
 
 import java.util.List;
 
+import com.example.ecommerce.Dto.CommonDto;
+import com.example.ecommerce.Dto.Response;
 import com.example.ecommerce.Model.Users;
 
 public interface AdminUserInterface {
@@ -14,6 +16,7 @@ public interface AdminUserInterface {
 	public List<Users> viewNewUsersList();
 	public List<Users> getUsersOrdered();
 //	public boolean deleteOrders();
-	public boolean updateOrders(String uname,List<String> pname);
+	public boolean updateOrders(String uname,List<CommonDto> c);
 	public boolean updateUser(String u);
+	public Response login(Users u);
 }

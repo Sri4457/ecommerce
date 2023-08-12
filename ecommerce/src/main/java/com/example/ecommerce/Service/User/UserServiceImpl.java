@@ -7,7 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.ecommerce.Dto.OrderDto;
+import com.example.ecommerce.Dto.CommonDto;
 import com.example.ecommerce.Dto.ProductDto;
 import com.example.ecommerce.Dto.Response;
 import com.example.ecommerce.Model.Orders;
@@ -108,7 +108,7 @@ public class UserServiceImpl implements UserInterface {
 					o.setQuantity(list.get(i).getCount());
 					o.setProduct_id(prepo.findByName(list.get(i).getName()).getId());
 					o.setTime(java.sql.Date.valueOf(LocalDate.now()));
-					o.setCost(o.getQuantity()*(prepo.findByName(list.get(i).getName()).getPrice()));
+					o.setCost(list.get(i).getCount()*(prepo.findByName(list.get(i).getName()).getPrice()));
 					List<Orders> l=u.getOrders();
 					l.add(o);
 					u.setOrders(l);
@@ -142,6 +142,8 @@ public class UserServiceImpl implements UserInterface {
 		}
 		catch(Exception e)
 		{
+			Response response=new Response(true,"Something Went wrong try again");
+			res.add(response);
 			System.out.println(e);
 		}
 		return res;
@@ -162,12 +164,12 @@ public class UserServiceImpl implements UserInterface {
 	}
 
 	@Override
-	public List<OrderDto> getOrderByUname(String uname) {
+	public List<CommonDto> getOrderByUname(String uname) {
 		List<Orders> list=urepo.findByUsername(uname).getOrders();
-		List<OrderDto> o=new ArrayList<>();
+		List<CommonDto> o=new ArrayList<>();
 		for(int i=0;i<list.size();i++)
 		{
-			OrderDto obj=new OrderDto();
+			CommonDto obj=new CommonDto();
 			obj.setId(i);
 			obj.setPname(prepo.findById(list.get(i).getProduct_id()).get().getName());
 			obj.setQty(list.get(i).getQuantity());

@@ -12,4 +12,5 @@ public interface ProductRepo extends JpaRepository<Products,Long>{
 	Products findByName(String name);
 
 	List<Products> findByCount(int count);
+	
 }

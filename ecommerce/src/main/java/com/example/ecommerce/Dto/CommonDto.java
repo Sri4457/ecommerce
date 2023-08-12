@@ -1,6 +1,6 @@
 package com.example.ecommerce.Dto;
 
-public class OrderDto {
+public class CommonDto {
 
 	private long id;
 	String status,pname,uname;

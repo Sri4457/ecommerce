@@ -15,5 +15,4 @@ public interface UserRepo extends JpaRepository<Users,Long>{
 	
 	List<Users> findByStatus(String status);
 	
-	
 }

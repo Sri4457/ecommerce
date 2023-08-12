@@ -13,7 +13,7 @@ public interface ProductInterface {
 	public List<Products> viewAll();
 	public Products viewByName(String name);
 	public boolean updateProduct(ProductDto p);
-	
+	public List<Products> getProductsByReqOrder(String path);
 	
 	
 }

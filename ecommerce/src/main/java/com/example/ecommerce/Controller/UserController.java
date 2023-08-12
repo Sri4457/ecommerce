@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.ecommerce.Dto.OrderDto;
+import com.example.ecommerce.Dto.CommonDto;
 import com.example.ecommerce.Dto.ProductDto;
 import com.example.ecommerce.Dto.Response;
 import com.example.ecommerce.Model.Users;
@@ -37,10 +37,10 @@ public class UserController {
 		return new ResponseEntity<List<Response>>(uinter.submitProducts(uname, prods),HttpStatus.OK);
 	}
 	@GetMapping("/orders/vieworders/{uname}")
-	public ResponseEntity<List<OrderDto>> viewOrders(@PathVariable String uname)
+	public ResponseEntity<List<CommonDto>> viewOrders(@PathVariable String uname)
 	{
-		List<OrderDto> list=uinter.getOrderByUname(uname);
-		return new ResponseEntity<List<OrderDto>>(list,HttpStatus.OK);
+		List<CommonDto> list=uinter.getOrderByUname(uname);
+		return new ResponseEntity<List<CommonDto>>(list,HttpStatus.OK);
 	}
 	@PutMapping("/update")
 	public ResponseEntity<Response> updateUser(@RequestBody Users u)

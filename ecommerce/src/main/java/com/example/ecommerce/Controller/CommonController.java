@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.ecommerce.Dto.Response;
 import com.example.ecommerce.Model.Products;
 import com.example.ecommerce.Model.Users;
+import com.example.ecommerce.Service.Admin.AdminUserInterface;
 import com.example.ecommerce.Service.Products.ProductInterface;
 import com.example.ecommerce.Service.User.UserInterface;
 
@@ -26,11 +27,14 @@ public class CommonController {
 	@Autowired
 	UserInterface uinter;
 	
+	@Autowired
+	AdminUserInterface adinter;
+	
 	@PostMapping("/login")
-	public ResponseEntity<Boolean> login(@RequestBody Users u)
+	public ResponseEntity<Response> login(@RequestBody Users u)
 	{
-		
-		return null;
+		Response response=adinter.login(u);
+		return new ResponseEntity<>(response,HttpStatus.OK);
 	}
 	@GetMapping("/product/viewall")
 	public ResponseEntity<List<Products>> getAllProducts()
@@ -56,6 +60,13 @@ public class CommonController {
 			response=new Response(true,"something went wrong");
 		}
 		return new ResponseEntity<Response>(response,HttpStatus.OK);
+	}
+	
+	@GetMapping("/product/sort/{path}")
+	public ResponseEntity<List<Products>> getProductsByReqOrder(@PathVariable("path") String path)
+	{
+		List<Products> result=pinter.getProductsByReqOrder(path);
+		return new ResponseEntity<List<Products>>(result,HttpStatus.OK);
 	}
 	
 }

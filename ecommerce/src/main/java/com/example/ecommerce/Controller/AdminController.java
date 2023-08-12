@@ -1,6 +1,5 @@
 package com.example.ecommerce.Controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.ecommerce.Service.Admin.AdminUserInterface;
 import com.example.ecommerce.Service.Products.ProductInterface;
+import com.example.ecommerce.Dto.CommonDto;
 import com.example.ecommerce.Dto.ProductDto;
 import com.example.ecommerce.Dto.Response;
 import com.example.ecommerce.Model.Products;
@@ -96,7 +96,7 @@ public class AdminController {
 		return new ResponseEntity<Response>(response,HttpStatus.OK);
 	} 
 	
-	@PutMapping("/user/update/{uname}")
+	@PutMapping("/user/release/{uname}")
 	public ResponseEntity<Response> updateUser(@PathVariable String uname)
 	{
 		Response response=null;
@@ -135,15 +135,10 @@ public class AdminController {
 	}
 	
 	@PutMapping("/orders/updateorder/{uname}")
-	public ResponseEntity<Response> updateOrders(@PathVariable("uname") String uname,@RequestBody List<ProductDto> p)
+	public ResponseEntity<Response> updateOrders(@PathVariable("uname") String uname,@RequestBody List<CommonDto> p)
 	{
-		List<String> names=new ArrayList<>();
 		Response response=null;
-		for(ProductDto pdto:p)
-		{
-			names.add(pdto.getName());
-		}
-		boolean b=auinter.updateOrders(uname, names);
+		boolean b=auinter.updateOrders(uname, p);
 		if(b==false)
 			response=new Response(true,"Something Went Wrong");
 		else

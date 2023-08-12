@@ -22,13 +22,13 @@ public class Orders {
 	@Column(name="status", nullable=false)
 	private String status;
 	
-	@Column(name="product_id")
+	@Column(name="product_id", nullable=false)
 	private long product_id;
 	
-	@Column(name="quantity")
+	@Column(name="quantity", nullable=false)
 	private int quantity;
 	
-	@Column(name="cost")
+	@Column(name="cost",nullable=false)
 	private double cost;
 	
 	

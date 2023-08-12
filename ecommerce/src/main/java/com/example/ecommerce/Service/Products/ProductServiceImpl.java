@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.example.ecommerce.Dto.ProductDto;
@@ -78,6 +79,24 @@ public class ProductServiceImpl implements ProductInterface{
 			System.out.println(e);
 		}
 		return b;
+	}
+
+	@Override
+	public List<Products> getProductsByReqOrder(String path) {
+		List<Products> list=null;
+		try
+		{
+			String[] s=path.split("-");
+			if(s[1].equalsIgnoreCase("asc"))
+				list=prepo.findAll(Sort.by(Sort.Direction.ASC, s[0]));
+			else if(s[1].equalsIgnoreCase("desc"))
+				list=prepo.findAll(Sort.by(Sort.Direction.DESC, s[0]));
+		}
+		catch(Exception e)
+		{
+			System.out.println(e);
+		}
+		return list;
 	}
 
 	
