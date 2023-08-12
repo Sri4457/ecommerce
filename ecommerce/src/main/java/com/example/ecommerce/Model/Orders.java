@@ -19,8 +19,8 @@ public class Orders {
 	@Column(name="time", nullable=false)
 	private Date time;
 	
-	@Column(name="status", nullable=false)
-	private String status;
+	@Column(name="order_status", nullable=false)
+	private String order_status;
 	
 	@Column(name="product_id", nullable=false)
 	private long product_id;
@@ -35,7 +35,7 @@ public class Orders {
 	public Orders(Date time, String status, long product_id, int quantity, double cost) {
 		super();
 		this.time = time;
-		this.status = status;
+		this.order_status = status;
 		this.product_id = product_id;
 		this.quantity = quantity;
 		this.cost = cost;
@@ -51,14 +51,13 @@ public class Orders {
 		this.product_id = product_id;
 	}
 
-	public String getStatus() {
-		return status;
+	
+	public String getOrder_status() {
+		return order_status;
 	}
-
-	public void setStatus(String status) {
-		this.status = status;
+	public void setOrder_status(String order_status) {
+		this.order_status = order_status;
 	}
-
 	public long getId() {
 		return id;
 	}

@@ -104,7 +104,7 @@ public class UserServiceImpl implements UserInterface {
 				for(int i=0;i<list.size();i++)
 				{
 					Orders o=new Orders();
-					o.setStatus("ordered");
+					o.setOrder_status("ordered");
 					o.setQuantity(list.get(i).getCount());
 					o.setProduct_id(prepo.findByName(list.get(i).getName()).getId());
 					o.setTime(java.sql.Date.valueOf(LocalDate.now()));
@@ -174,7 +174,7 @@ public class UserServiceImpl implements UserInterface {
 			obj.setPname(prepo.findById(list.get(i).getProduct_id()).get().getName());
 			obj.setQty(list.get(i).getQuantity());
 			obj.setPrice(prepo.findById(list.get(i).getProduct_id()).get().getPrice());
-			obj.setStatus(list.get(i).getStatus());
+			obj.setStatus(list.get(i).getOrder_status());
 			obj.setUname(uname);
 			o.add(obj);
 		}

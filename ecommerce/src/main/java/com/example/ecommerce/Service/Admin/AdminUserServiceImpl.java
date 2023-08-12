@@ -169,8 +169,8 @@ public class AdminUserServiceImpl implements AdminUserInterface{
 				
 				if(map.containsKey(prepo.findById(o.getProduct_id()).get().getName()))
 				{
-					o.setStatus(map.get(prepo.findById(o.getProduct_id()).get().getName()));
-					msg+="The Product Name "+prepo.findById(o.getProduct_id()).get().getName()+" in your order is "+o.getStatus()+".\n";
+					o.setOrder_status(map.get(prepo.findById(o.getProduct_id()).get().getName()));
+					msg+="The Product Name "+prepo.findById(o.getProduct_id()).get().getName()+" in your order is "+o.getOrder_status()+".\n";
 					b=true;
 				}
 			}
