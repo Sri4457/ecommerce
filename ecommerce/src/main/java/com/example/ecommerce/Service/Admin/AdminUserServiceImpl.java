@@ -93,7 +93,7 @@ public class AdminUserServiceImpl implements AdminUserInterface{
 		boolean b=false;
 		try {
 		Users user=urepo.findByUsername(u);
-		user.setStatus("released");
+		user.setUserstatus("released");
 		urepo.save(user);
 		b=true;
 		}
@@ -106,7 +106,7 @@ public class AdminUserServiceImpl implements AdminUserInterface{
 
 	@Override
 	public List<Users> viewBlockUsersList() {
-		return urepo.findByStatus("unblocked");
+		return urepo.findByUserstatus("unblocked");
 	}
 
 	@Override
@@ -116,7 +116,7 @@ public class AdminUserServiceImpl implements AdminUserInterface{
 
 	@Override
 	public List<Users> viewNewUsersList() {
-		return urepo.findByStatus("blocked");
+		return urepo.findByUserstatus("blocked");
 	}
 
 	@Override

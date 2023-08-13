@@ -23,8 +23,8 @@ public class Users {
 	@Column(name="password",nullable=false)
 	private String password;
 	
-	@Column(name="status" ,nullable=false)
-	private String status;
+	@Column(name="userstatus" ,nullable=false)
+	private String userstatus;
 	
 	@Column(name="email",nullable=false)
 	private String email;
@@ -37,7 +37,7 @@ public class Users {
 		super();
 		this.username = username;
 		this.password = password;
-		this.status = status;
+		this.userstatus = status;
 		this.email = email;
 	}
 
@@ -75,12 +75,13 @@ public class Users {
 		this.password = password;
 	}
 
-	public String getStatus() {
-		return status;
+	
+	public String getUserstatus() {
+		return userstatus;
 	}
 
-	public void setStatus(String status) {
-		this.status = status;
+	public void setUserstatus(String userstatus) {
+		this.userstatus = userstatus;
 	}
 
 	public String getEmail() {

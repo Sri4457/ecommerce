@@ -97,7 +97,7 @@ public class UserServiceImpl implements UserInterface {
 		Users u=urepo.findByUsername(s);
 		try
 		{
-			if(!u.getStatus().equalsIgnoreCase("blocked")) 
+			if(!u.getUserstatus().equalsIgnoreCase("blocked")) 
 			{
 				String msg="";
 				double price=0;

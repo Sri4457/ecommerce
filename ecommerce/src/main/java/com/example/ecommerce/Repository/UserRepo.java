@@ -13,6 +13,6 @@ public interface UserRepo extends JpaRepository<Users,Long>{
 	
 	Users findByUsername(String username);
 	
-	List<Users> findByStatus(String status);
+	List<Users> findByUserstatus(String status);
 	
 }
