@@ -7,8 +7,13 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 
 @Entity
+@Table(uniqueConstraints={
+	    @UniqueConstraint(columnNames = {"category", "name"})
+	})
 public class Products {
 
 	@Id
@@ -26,14 +31,25 @@ public class Products {
 	
 	@Column(name="date",nullable=false)
 	private Date date;
+	
+	@Column(name="category", nullable=false)
+	private String category;
 
 	
-	public Products( String name, int count, double price, Date date) {
+	
+	public Products(String name, int count, double price, Date date, String category) {
 		super();
 		this.name = name;
 		this.count = count;
 		this.price = price;
 		this.date = date;
+		this.category = category;
+	}
+	public String getCategory() {
+		return category;
+	}
+	public void setCategory(String category) {
+		this.category = category;
 	}
 	public Products()
 	{

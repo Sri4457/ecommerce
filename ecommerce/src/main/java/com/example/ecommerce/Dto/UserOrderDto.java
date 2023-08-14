@@ -1,11 +1,11 @@
 package com.example.ecommerce.Dto;
 
-public class CommonDto {
+public class UserOrderDto {
 
 	private long id;
-	String status,pname,uname;
-	private double price;
+	String status,pname,uname,category;
 	private int qty;
+	private double price;
 	public long getId() {
 		return id;
 	}
@@ -30,11 +30,11 @@ public class CommonDto {
 	public void setUname(String uname) {
 		this.uname = uname;
 	}
-	public double getPrice() {
-		return price;
+	public String getCategory() {
+		return category;
 	}
-	public void setPrice(double price) {
-		this.price = price;
+	public void setCategory(String category) {
+		this.category = category;
 	}
 	public int getQty() {
 		return qty;
@@ -42,5 +42,13 @@ public class CommonDto {
 	public void setQty(int qty) {
 		this.qty = qty;
 	}
+	public double getPrice() {
+		return price;
+	}
+	public void setPrice(double price) {
+		this.price = price;
+	}
+	
+	
 	
 }

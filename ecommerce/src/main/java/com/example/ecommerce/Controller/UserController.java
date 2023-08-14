@@ -14,11 +14,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.ecommerce.Dto.CommonDto;
 import com.example.ecommerce.Dto.ProductDto;
 import com.example.ecommerce.Dto.Response;
+import com.example.ecommerce.Dto.UserOrderDto;
 import com.example.ecommerce.Model.Users;
-import com.example.ecommerce.Service.Products.ProductInterface;
+import com.example.ecommerce.Service.Products.CommonInterface;
 import com.example.ecommerce.Service.User.UserInterface;
 
 @CrossOrigin(origins="http://localhost:3000/")
@@ -30,8 +30,13 @@ public class UserController {
 	UserInterface uinter;
 	
 	@Autowired
-	ProductInterface pinter;
+	CommonInterface pinter;
 	
+	@PostMapping("/forgetpassword/{uname}")
+	public ResponseEntity<Response> sendPassword(@PathVariable("uname") String uname)
+	{
+		return new ResponseEntity<Response>(uinter.forgetPassword(uname),HttpStatus.OK);
+	}
 	
 	@PostMapping("/submitcart/{username}")
 	public ResponseEntity<List<Response>> submitCart(@PathVariable("username") String uname,@RequestBody List<ProductDto> prods)
@@ -39,10 +44,10 @@ public class UserController {
 		return new ResponseEntity<List<Response>>(uinter.submitProducts(uname, prods),HttpStatus.OK);
 	}
 	@GetMapping("/orders/vieworders/{uname}")
-	public ResponseEntity<List<CommonDto>> viewOrders(@PathVariable String uname)
+	public ResponseEntity<List<UserOrderDto>> viewOrders(@PathVariable String uname)
 	{
-		List<CommonDto> list=uinter.getOrderByUname(uname);
-		return new ResponseEntity<List<CommonDto>>(list,HttpStatus.OK);
+		List<UserOrderDto> list=uinter.getOrderByUname(uname);
+		return new ResponseEntity<List<UserOrderDto>>(list,HttpStatus.OK);
 	}
 	@PutMapping("/update")
 	public ResponseEntity<Response> updateUser(@RequestBody Users u)

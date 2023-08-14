@@ -1,5 +1,6 @@
 package com.example.ecommerce.Controller;
 
+import java.sql.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.ecommerce.Service.Admin.AdminUserInterface;
-import com.example.ecommerce.Service.Products.ProductInterface;
-import com.example.ecommerce.Dto.CommonDto;
+import com.example.ecommerce.Service.Products.CommonInterface;
+import com.example.ecommerce.Dto.DateDto;
+import com.example.ecommerce.Dto.updateOrdersDto;
 import com.example.ecommerce.Dto.ProductDto;
 import com.example.ecommerce.Dto.Response;
 import com.example.ecommerce.Model.Products;
@@ -32,7 +34,7 @@ public class AdminController {
 	AdminUserInterface auinter;
 	
 	@Autowired
-	ProductInterface pinter;
+	CommonInterface pinter;
 	
 	@PostMapping("/product/add")
 	public ResponseEntity<Response> addProduct(@RequestBody Products p)
@@ -137,7 +139,7 @@ public class AdminController {
 	}
 	
 	@PutMapping("/orders/updateorder/{uname}")
-	public ResponseEntity<Response> updateOrders(@PathVariable("uname") String uname,@RequestBody List<CommonDto> p)
+	public ResponseEntity<Response> updateOrders(@PathVariable("uname") String uname,@RequestBody List<updateOrdersDto> p)
 	{
 		Response response=null;
 		boolean b=auinter.updateOrders(uname, p);
@@ -147,5 +149,13 @@ public class AdminController {
 			response=new Response(false,"Updation Done");
 		return new ResponseEntity<>(response,HttpStatus.OK);
 		
+	}
+
+	@GetMapping("/countordersby")
+	public ResponseEntity<Response> getCountBySpecificDate(@RequestBody DateDto a)
+	{
+		Date d1=Date.valueOf(a.getDate1());
+		Date d2=Date.valueOf(a.getDate2());
+		return new ResponseEntity<Response>(auinter.getOrdersCountByDay(d1,d2),HttpStatus.OK);
 	}
 }

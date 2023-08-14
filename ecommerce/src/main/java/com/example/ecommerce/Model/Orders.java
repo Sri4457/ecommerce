@@ -2,11 +2,13 @@ package com.example.ecommerce.Model;
 
 import java.sql.Date;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 
 
 @Entity
@@ -22,35 +24,28 @@ public class Orders {
 	@Column(name="order_status", nullable=false)
 	private String order_status;
 	
-	@Column(name="product_id", nullable=false)
-	private long product_id;
-	
 	@Column(name="quantity", nullable=false)
 	private int quantity;
 	
 	@Column(name="cost",nullable=false)
 	private double cost;
 	
+	@OneToOne(cascade = CascadeType.ALL)
+	private Products p;
 	
-	public Orders(Date time, String status, long product_id, int quantity, double cost) {
+	
+	public Orders(Date time, String order_status, int quantity, double cost, Products p) {
 		super();
 		this.time = time;
-		this.order_status = status;
-		this.product_id = product_id;
+		this.order_status = order_status;
 		this.quantity = quantity;
 		this.cost = cost;
+		this.p = p;
 	}
+	
 	public Orders() {
 		
 	}
-	public long getProduct_id() {
-		return product_id;
-	}
-
-	public void setProduct_id(long product_id) {
-		this.product_id = product_id;
-	}
-
 	
 	public String getOrder_status() {
 		return order_status;
@@ -86,6 +81,14 @@ public class Orders {
 	}
 	public void setCost(double cost) {
 		this.cost = cost;
+	}
+
+	public Products getP() {
+		return p;
+	}
+
+	public void setP(Products p) {
+		this.p = p;
 	}
 	
 	

@@ -7,9 +7,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.ecommerce.Dto.CommonDto;
 import com.example.ecommerce.Dto.ProductDto;
 import com.example.ecommerce.Dto.Response;
+import com.example.ecommerce.Dto.UserOrderDto;
 import com.example.ecommerce.Model.Orders;
 import com.example.ecommerce.Model.Products;
 import com.example.ecommerce.Model.Users;
@@ -45,6 +45,29 @@ public class UserServiceImpl implements UserInterface {
 			
 		}
 		return b;
+	}
+	
+	@Override
+	public Response forgetPassword(String username) {
+		Response response=null;
+		try
+		{
+			Users u=urepo.findByUsername(username);
+			String msg="The Password you created for your account is : "+u.getPassword();
+			try{
+				es.notifyUser(u.getEmail(),msg , "Forget Password");
+				response=new Response(false,"Password Sent to Email");
+			}
+			catch(Exception e)
+			{
+				response=new Response(true,"Something Went wrong while sendign the password");
+			}
+		}
+		catch(Exception e)
+		{
+			response=new Response(true,"Some thing went wrong while fetching your details");
+		}
+		return response;
 	}
 
 	@Override
@@ -106,7 +129,7 @@ public class UserServiceImpl implements UserInterface {
 					Orders o=new Orders();
 					o.setOrder_status("ordered");
 					o.setQuantity(list.get(i).getCount());
-					o.setProduct_id(prepo.findByName(list.get(i).getName()).getId());
+					o.setP(prepo.geByNameAndcategory(list.get(i).getName(), list.get(i).getCategory()));
 					o.setTime(java.sql.Date.valueOf(LocalDate.now()));
 					o.setCost(list.get(i).getCount()*(prepo.findByName(list.get(i).getName()).getPrice()));
 					List<Orders> l=u.getOrders();
@@ -116,7 +139,7 @@ public class UserServiceImpl implements UserInterface {
 					{
 						Response r=new Response(false,"The Product with name "+list.get(i).getName()+" is ordered");
 						updateProducts(list.get(i));
-						msg+="The Product Name "+prepo.findById(o.getProduct_id()).get().getName()+" in successfully ordered.\n";
+						msg+="The Product Name "+o.getP().getName()+" in successfully ordered.\n";
 						urepo.save(u);
 						price+=o.getCost();
 						res.add(r);
@@ -164,21 +187,23 @@ public class UserServiceImpl implements UserInterface {
 	}
 
 	@Override
-	public List<CommonDto> getOrderByUname(String uname) {
+	public List<UserOrderDto> getOrderByUname(String uname) {
 		List<Orders> list=urepo.findByUsername(uname).getOrders();
-		List<CommonDto> o=new ArrayList<>();
+		List<UserOrderDto> o=new ArrayList<>();
 		for(int i=0;i<list.size();i++)
 		{
-			CommonDto obj=new CommonDto();
-			obj.setId(i);
-			obj.setPname(prepo.findById(list.get(i).getProduct_id()).get().getName());
+			UserOrderDto obj=new UserOrderDto();
+			obj.setId(list.get(i).getId());
+			obj.setPname(list.get(i).getP().getName());
 			obj.setQty(list.get(i).getQuantity());
-			obj.setPrice(prepo.findById(list.get(i).getProduct_id()).get().getPrice());
+			obj.setPrice(list.get(i).getP().getPrice());
 			obj.setStatus(list.get(i).getOrder_status());
 			obj.setUname(uname);
 			o.add(obj);
 		}
 		return o;
 	}
+
+	
 
 }

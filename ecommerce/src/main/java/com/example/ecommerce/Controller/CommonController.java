@@ -16,7 +16,7 @@ import com.example.ecommerce.Dto.Response;
 import com.example.ecommerce.Model.Products;
 import com.example.ecommerce.Model.Users;
 import com.example.ecommerce.Service.Admin.AdminUserInterface;
-import com.example.ecommerce.Service.Products.ProductInterface;
+import com.example.ecommerce.Service.Products.CommonInterface;
 import com.example.ecommerce.Service.User.UserInterface;
 
 @CrossOrigin(origins="http://localhost:3000/")
@@ -24,7 +24,7 @@ import com.example.ecommerce.Service.User.UserInterface;
 public class CommonController {
 
 	@Autowired
-	ProductInterface pinter;
+	CommonInterface pinter;
 	
 	@Autowired
 	UserInterface uinter;
@@ -35,7 +35,7 @@ public class CommonController {
 	@PostMapping("/login")
 	public ResponseEntity<Response> login(@RequestBody Users u)
 	{
-		Response response=adinter.login(u);
+		Response response=pinter.login(u);
 		return new ResponseEntity<>(response,HttpStatus.OK);
 	}
 	@GetMapping("/product/viewall")

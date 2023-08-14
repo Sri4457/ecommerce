@@ -1,15 +1,17 @@
 package com.example.ecommerce.Service.Admin;
 
+import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.ecommerce.Dto.CommonDto;
+import com.example.ecommerce.Dto.updateOrdersDto;
 import com.example.ecommerce.Dto.Response;
 import com.example.ecommerce.Model.Orders;
 import com.example.ecommerce.Model.Users;
+import com.example.ecommerce.Repository.OrdersRepo;
 import com.example.ecommerce.Repository.ProductRepo;
 import com.example.ecommerce.Repository.UserRepo;
 import com.example.ecommerce.Service.EmailService;
@@ -26,36 +28,8 @@ public class AdminUserServiceImpl implements AdminUserInterface{
 	@Autowired
 	ProductRepo prepo;
 	
-	@Override
-	public Response login(Users u) {
-		Response res=null;
-		try 
-		{
-			Users user=urepo.findByUsername(u.getUsername());
-			if(user==null)
-			{
-				res=new Response(true,"User not exit with the Username you provided");
-			}
-			else
-			{
-				String pass=user.getPassword();
-				if(pass.equals(u.getPassword()))
-				{
-					res=new Response(false,"Login Successfull");
-				}
-				else
-				{
-					res=new Response(true,"Password you provided is wrong");
-				}
-			}
-		}
-		catch(Exception e)
-		{
-			res=new Response(true,"Sonething Went Wrong");
-			System.out.println(e);
-		}
-		return res;
-	}
+	@Autowired
+	OrdersRepo orepo;
 
 	
 	@Override
@@ -122,7 +96,7 @@ public class AdminUserServiceImpl implements AdminUserInterface{
 	@Override
 	public List<Users> getUsersOrdered() {
 		
-		return null;
+		return urepo.findAll();
 	}
 
 //	@Override
@@ -153,12 +127,12 @@ public class AdminUserServiceImpl implements AdminUserInterface{
 //	}
 
 	@Override
-	public boolean updateOrders(String uname, List<CommonDto> c) {
+	public boolean updateOrders(String uname, List<updateOrdersDto> c) {
 		Users u=urepo.findByUsername(uname);
 		List<Orders> l=u.getOrders();
 		HashMap<String,String> map=new HashMap<>();
 		for(int i=0;i<c.size();i++)
-			map.put(c.get(i).getPname(), c.get(i).getStatus());
+			map.put(c.get(i).getPname()+c.get(i).getCategory(), c.get(i).getStatus());
 		System.out.println(map);
 		boolean b=false;
 		try 
@@ -167,10 +141,10 @@ public class AdminUserServiceImpl implements AdminUserInterface{
 			for(Orders o:l)
 			{
 				
-				if(map.containsKey(prepo.findById(o.getProduct_id()).get().getName()))
+				if(map.containsKey((o.getP().getName()+o.getP().getCategory())))
 				{
-					o.setOrder_status(map.get(prepo.findById(o.getProduct_id()).get().getName()));
-					msg+="The Product Name "+prepo.findById(o.getProduct_id()).get().getName()+" in your order is "+o.getOrder_status()+".\n";
+					o.setOrder_status(map.get((o.getP().getName()+o.getP().getCategory())));
+					msg+="The Product Name "+o.getP().getName()+" in your order is "+o.getOrder_status()+".\n";
 					b=true;
 				}
 			}
@@ -186,6 +160,21 @@ public class AdminUserServiceImpl implements AdminUserInterface{
 			System.out.println(e);
 		}
 		return b;
+	}
+
+	@Override
+	public Response getOrdersCountByDay(Date d1,Date d2) {
+		Response response=null;
+		try {
+			int count=orepo.getCountByDate(d1, d2).size();
+			response=new Response(false,"The Total orders between specific dates "+d1+" and "+d2+" are : "+count);
+		}
+		catch(Exception e)
+		{
+			System.out.println(e);
+			response=new Response(true, "Something Went Wrong while fetching count of orders on specific date");
+		}
+		return response;
 	}
 
 	
