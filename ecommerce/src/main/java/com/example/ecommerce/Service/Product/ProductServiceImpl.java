@@ -1,4 +1,4 @@
-package com.example.ecommerce.Service.Products;
+package com.example.ecommerce.Service.Product;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -7,52 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import com.example.ecommerce.Dto.ProductDto;
-import com.example.ecommerce.Dto.Response;
 import com.example.ecommerce.Model.Products;
-import com.example.ecommerce.Model.Users;
 import com.example.ecommerce.Repository.ProductRepo;
-import com.example.ecommerce.Repository.UserRepo;
 
 @Service
-public class CommonServiceImpl implements CommonInterface{
-
+public class ProductServiceImpl implements ProductService{
+	
 	@Autowired
 	ProductRepo prepo;
-	
-	@Autowired
-	UserRepo urepo;
-	
-	@Override
-	public Response login(Users u) {
-		Response res=null;
-		try 
-		{
-			Users user=urepo.findByUsername(u.getUsername());
-			if(user==null)
-			{
-				res=new Response(true,"User not exit with the Username you provided");
-			}
-			else
-			{
-				String pass=user.getPassword();
-				if(pass.equals(u.getPassword()))
-				{
-					res=new Response(false,"Login Successfull");
-				}
-				else
-				{
-					res=new Response(true,"Password you provided is wrong");
-				}
-			}
-		}
-		catch(Exception e)
-		{
-			res=new Response(true,"Sonething Went Wrong");
-			System.out.println(e);
-		}
-		return res;
-	}
 	
 	@Override
 	public boolean addProduct(Products p) {
@@ -99,7 +61,7 @@ public class CommonServiceImpl implements CommonInterface{
 	}
 
 	@Override
-	public boolean updateProduct(ProductDto p) {
+	public boolean updateProduct(Products p) {
 		boolean b=false;
 		try {
 			Products prod=prepo.findByName(p.getName());
@@ -135,5 +97,10 @@ public class CommonServiceImpl implements CommonInterface{
 		return list;
 	}
 
-	
+	@Override
+	public List<Products> getProductsBySearch(String n) {
+		return prepo.getByName("%"+n+"%");
+	}
+
+
 }

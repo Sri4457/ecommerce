@@ -16,7 +16,8 @@ import com.example.ecommerce.Dto.Response;
 import com.example.ecommerce.Model.Products;
 import com.example.ecommerce.Model.Users;
 import com.example.ecommerce.Service.Admin.AdminUserInterface;
-import com.example.ecommerce.Service.Products.CommonInterface;
+import com.example.ecommerce.Service.Common.CommonInterface;
+import com.example.ecommerce.Service.Product.ProductService;
 import com.example.ecommerce.Service.User.UserInterface;
 
 @CrossOrigin(origins="http://localhost:3000/")
@@ -24,10 +25,13 @@ import com.example.ecommerce.Service.User.UserInterface;
 public class CommonController {
 
 	@Autowired
-	CommonInterface pinter;
+	ProductService pinter;
 	
 	@Autowired
 	UserInterface uinter;
+	
+	@Autowired
+	CommonInterface cser;
 	
 	@Autowired
 	AdminUserInterface adinter;
@@ -35,7 +39,7 @@ public class CommonController {
 	@PostMapping("/login")
 	public ResponseEntity<Response> login(@RequestBody Users u)
 	{
-		Response response=pinter.login(u);
+		Response response=cser.login(u);
 		return new ResponseEntity<>(response,HttpStatus.OK);
 	}
 	@GetMapping("/product/viewall")
@@ -71,4 +75,9 @@ public class CommonController {
 		return new ResponseEntity<List<Products>>(result,HttpStatus.OK);
 	}
 	
+	@GetMapping("/product/search/{name}")
+	public ResponseEntity<List<Products>> getProducts(@PathVariable("name") String name)
+	{
+		return new ResponseEntity<>(pinter.getProductsBySearch(name),HttpStatus.OK);
+	}
 }

@@ -15,5 +15,8 @@ public interface ProductRepo extends JpaRepository<Products,Long>{
 	List<Products> findByCount(int count);
 	
 	@Query(value="select * from products where name=?1 and category=?2",nativeQuery=true)
-	Products geByNameAndcategory(String name,String category);
+	Products getByNameAndcategory(String name,String category);
+	
+	@Query(value="select * from products where name like ?1 ",nativeQuery=true)
+	List<Products> getByName(String name);
 }

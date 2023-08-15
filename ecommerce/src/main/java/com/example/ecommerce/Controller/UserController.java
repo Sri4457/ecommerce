@@ -14,11 +14,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.ecommerce.Dto.ProductDto;
 import com.example.ecommerce.Dto.Response;
 import com.example.ecommerce.Dto.UserOrderDto;
+import com.example.ecommerce.Model.Products;
 import com.example.ecommerce.Model.Users;
-import com.example.ecommerce.Service.Products.CommonInterface;
+import com.example.ecommerce.Service.Common.CommonInterface;
 import com.example.ecommerce.Service.User.UserInterface;
 
 @CrossOrigin(origins="http://localhost:3000/")
@@ -39,7 +39,7 @@ public class UserController {
 	}
 	
 	@PostMapping("/submitcart/{username}")
-	public ResponseEntity<List<Response>> submitCart(@PathVariable("username") String uname,@RequestBody List<ProductDto> prods)
+	public ResponseEntity<List<Response>> submitCart(@PathVariable("username") String uname,@RequestBody List<Products> prods)
 	{
 		return new ResponseEntity<List<Response>>(uinter.submitProducts(uname, prods),HttpStatus.OK);
 	}

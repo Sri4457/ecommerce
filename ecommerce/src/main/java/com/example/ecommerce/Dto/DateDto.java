@@ -2,23 +2,24 @@ package com.example.ecommerce.Dto;
 
 public class DateDto {
 
-	private String date1,date2;
+	private String dateone,datetwo;
 
-	public String getDate1() {
-		return date1;
+	public String getDateone() {
+		return dateone;
 	}
 
-	public void setDate1(String date1) {
-		this.date1 = date1;
+	public void setDateone(String dateone) {
+		this.dateone = dateone;
 	}
 
-	public String getDate2() {
-		return date2;
+	public String getDatetwo() {
+		return datetwo;
 	}
 
-	public void setDate2(String date2) {
-		this.date2 = date2;
+	public void setDatetwo(String datetwo) {
+		this.datetwo = datetwo;
 	}
+
 	
 	
 	

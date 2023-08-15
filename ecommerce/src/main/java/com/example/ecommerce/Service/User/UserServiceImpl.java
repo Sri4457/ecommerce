@@ -7,7 +7,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.ecommerce.Dto.ProductDto;
 import com.example.ecommerce.Dto.Response;
 import com.example.ecommerce.Dto.UserOrderDto;
 import com.example.ecommerce.Model.Orders;
@@ -115,7 +114,7 @@ public class UserServiceImpl implements UserInterface {
 	}
 
 	@Override
-	public List<Response> submitProducts(String s, List<ProductDto> list) {
+	public List<Response> submitProducts(String s, List<Products> list) {
 		List<Response> res=new ArrayList<>();
 		Users u=urepo.findByUsername(s);
 		try
@@ -129,7 +128,7 @@ public class UserServiceImpl implements UserInterface {
 					Orders o=new Orders();
 					o.setOrder_status("ordered");
 					o.setQuantity(list.get(i).getCount());
-					o.setP(prepo.geByNameAndcategory(list.get(i).getName(), list.get(i).getCategory()));
+					o.setP(prepo.getByNameAndcategory(list.get(i).getName(), list.get(i).getCategory()));
 					o.setTime(java.sql.Date.valueOf(LocalDate.now()));
 					o.setCost(list.get(i).getCount()*(prepo.findByName(list.get(i).getName()).getPrice()));
 					List<Orders> l=u.getOrders();
@@ -172,7 +171,7 @@ public class UserServiceImpl implements UserInterface {
 		return res;
 	}
 
-	private boolean checkProducts(ProductDto pdto)
+	private boolean checkProducts(Products pdto)
 	{
 		Products p=prepo.findByName(pdto.getName());
 		if(p.getCount()>=pdto.getCount())
@@ -180,7 +179,7 @@ public class UserServiceImpl implements UserInterface {
 		else
 			return false;
 	}
-	private void updateProducts(ProductDto list) {
+	private void updateProducts(Products list) {
 		Products p=prepo.findByName(list.getName());
 		p.setCount((p.getCount())-list.getCount());
 		prepo.save(p);
