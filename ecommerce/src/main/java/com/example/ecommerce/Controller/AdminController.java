@@ -16,8 +16,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.ecommerce.Service.Admin.AdminProductInterface;
 import com.example.ecommerce.Service.Admin.AdminUserInterface;
-import com.example.ecommerce.Service.Product.ProductService;
+import com.example.ecommerce.Service.Common.CommonInterface;
 import com.example.ecommerce.Dto.DateDto;
 import com.example.ecommerce.Dto.updateOrdersDto;
 import com.example.ecommerce.Dto.Response;
@@ -33,13 +34,16 @@ public class AdminController {
 	AdminUserInterface auinter;
 	
 	@Autowired
-	ProductService pinter;
+	CommonInterface cinter;
+	
+	@Autowired
+	AdminProductInterface apinter;
 	
 	@PostMapping("/product/add")
 	public ResponseEntity<Response> addProduct(@RequestBody Products p)
 	{
 		Response response=null;
-		boolean b=pinter.addProduct(p);
+		boolean b=apinter.addProduct(p);
 		if(b)
 		{
 			response=new Response(false,"Product added Successfully");
@@ -50,11 +54,16 @@ public class AdminController {
 		return new ResponseEntity<Response>(response,HttpStatus.OK);
 	}
 	
-	@DeleteMapping("/product/delete/{qty}")
-	public ResponseEntity<Response> deleteProduct(@PathVariable("qty") int qty)
+	@DeleteMapping("/product/delete/{id}")
+	public ResponseEntity<Response> deleteProduct(@PathVariable long id)
+	{
+		return new ResponseEntity<>(apinter.deleteProductById(id),HttpStatus.OK);
+	}
+	@DeleteMapping("/product/deletebyqty/{qty}")
+	public ResponseEntity<Response> deleteProductByQty(@PathVariable("qty") int qty)
 	{
 		Response response=null;
-		boolean b=pinter.deleteProduct(qty);
+		boolean b=apinter.deleteProductByQty(qty);
 		if(b)
 		{
 			response=new Response(false,"Products deleted Successfully");
@@ -65,12 +74,17 @@ public class AdminController {
 		return new ResponseEntity<Response>(response,HttpStatus.OK);
 	} 
 	
+	@GetMapping("/product/findbyid/{id}")
+	public ResponseEntity<Products> getProductById(@PathVariable long id)
+	{
+		return new ResponseEntity<>(apinter.getProductById(id),HttpStatus.OK);
+	}
 	
 	@PutMapping("/product/update")
 	public ResponseEntity<Response> UpdateProduct(@RequestBody Products p)
 	{
 		Response response;
-		boolean b=pinter.updateProduct(p);
+		boolean b=apinter.updateProduct(p);
 		if(b)
 		{
 			response=new Response(false,"Products Updated Successfully");
@@ -84,11 +98,11 @@ public class AdminController {
 	
 	
 	
-	@DeleteMapping("/user/delete")
-	public ResponseEntity<Response> deleteUser(@RequestBody Users u)
+	@DeleteMapping("/user/delete/{id}")
+	public ResponseEntity<Response> deleteUser(@PathVariable long id)
 	{
 		Response response=null;
-		boolean b=auinter.deleteUser(u.getUsername());
+		boolean b=auinter.deleteUser(id);
 		if(b)
 		{
 			response=new Response(false,"User deleted Successfully");
@@ -99,14 +113,29 @@ public class AdminController {
 		return new ResponseEntity<Response>(response,HttpStatus.OK);
 	} 
 	
-	@PutMapping("/user/release/{uname}")
-	public ResponseEntity<Response> updateUser(@PathVariable String uname)
+	@PutMapping("/user/release/{id}")
+	public ResponseEntity<Response> releaseUser(@PathVariable long id)
 	{
 		Response response=null;
-		boolean b=auinter.updateUser(uname);
+		boolean b=auinter.updateUser(id,"release");
 		if(b)
 		{
 			response=new Response(false,"User Released Successfully");
+		}
+		else {
+			response=new Response(true,"something went wrong");
+		}
+		return new ResponseEntity<Response>(response,HttpStatus.OK);
+	} 
+	
+	@PutMapping("/user/block/{id}")
+	public ResponseEntity<Response> blockUser(@PathVariable long id)
+	{
+		Response response=null;
+		boolean b=auinter.updateUser(id,"block");
+		if(b)
+		{
+			response=new Response(false,"User blocked Successfully");
 		}
 		else {
 			response=new Response(true,"something went wrong");

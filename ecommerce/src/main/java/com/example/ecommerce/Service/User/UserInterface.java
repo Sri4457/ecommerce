@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.example.ecommerce.Dto.Response;
 import com.example.ecommerce.Dto.UserOrderDto;
+import com.example.ecommerce.Model.Cart;
 import com.example.ecommerce.Model.Products;
 import com.example.ecommerce.Model.Users;
 
@@ -16,7 +17,7 @@ public interface UserInterface {
 	public Products viewProductByName(String name);
 	public boolean UpdateProfile(Users u);
 	public Users getByUname(String uname);
-	public List<Response> submitProducts(String s,List<Products> list);
+	public Response addToCart(Cart list);
 	public List<UserOrderDto> getOrderByUname(String uname);
-	
+	public List<Response> submitCart(List<Long> list);
 }

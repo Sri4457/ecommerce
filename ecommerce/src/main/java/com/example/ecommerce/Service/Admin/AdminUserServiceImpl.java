@@ -49,10 +49,10 @@ public class AdminUserServiceImpl implements AdminUserInterface{
 	}
 
 	@Override
-	public boolean deleteUser(String uname) {
+	public boolean deleteUser(long id) {
 		boolean b=false;
 		try {
-			urepo.delete(urepo.findByUsername(uname));
+			urepo.delete(urepo.findById(id).get());
 			b=true;
 		}
 		catch(Exception e)
@@ -63,11 +63,14 @@ public class AdminUserServiceImpl implements AdminUserInterface{
 	}
 	
 	@Override
-	public boolean updateUser(String u) {
+	public boolean updateUser(long id,String msg) {
 		boolean b=false;
 		try {
-		Users user=urepo.findByUsername(u);
+		Users user=urepo.findById(id).get();
+		if(msg.equalsIgnoreCase("release"))
 		user.setUserstatus("released");
+		else
+			user.setUserstatus("blocked");
 		urepo.save(user);
 		b=true;
 		}
@@ -141,10 +144,10 @@ public class AdminUserServiceImpl implements AdminUserInterface{
 			for(Orders o:l)
 			{
 				
-				if(map.containsKey((o.getP().getName()+o.getP().getCategory())))
+				if(map.containsKey((o.getPname()+o.getCategory())))
 				{
-					o.setOrder_status(map.get((o.getP().getName()+o.getP().getCategory())));
-					msg+="The Product Name "+o.getP().getName()+" in your order is "+o.getOrder_status()+".\n";
+					o.setOrder_status(map.get((o.getPname()+o.getCategory())));
+					msg+="The Product Name "+o.getPname()+" in your order is "+o.getOrder_status()+".\n";
 					b=true;
 				}
 			}
@@ -175,6 +178,26 @@ public class AdminUserServiceImpl implements AdminUserInterface{
 			response=new Response(true, "Something Went Wrong while fetching count of orders on specific date");
 		}
 		return response;
+	}
+
+	@Override
+	public Response getOrdersCountByCategory(String cat) {
+		int count=orepo.getCountByCategory(cat);
+		if(count>0)
+			return new Response(false,"The Number Orders for the "+cat+" Category are Zero");
+		else {
+			return new Response(false,"The Number Orders for the "+cat+" Category are : "+count);
+		}
+	}
+
+	@Override
+	public Response getOrderCountByCatAndName(String c, String n) {
+		int count=orepo.getCountByCategoryAndName(c, n);
+		if(count>0)
+			return new Response(false,"The Number Orders for the particular Category and Product Name are Zero");
+		else {
+			return new Response(false,"The Number Orders for the "+c+" Category with the Product Name "+n+" : "+count);
+		}
 	}
 
 	

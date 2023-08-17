@@ -17,15 +17,13 @@ import com.example.ecommerce.Model.Products;
 import com.example.ecommerce.Model.Users;
 import com.example.ecommerce.Service.Admin.AdminUserInterface;
 import com.example.ecommerce.Service.Common.CommonInterface;
-import com.example.ecommerce.Service.Product.ProductService;
 import com.example.ecommerce.Service.User.UserInterface;
 
 @CrossOrigin(origins="http://localhost:3000/")
 @RestController
 public class CommonController {
 
-	@Autowired
-	ProductService pinter;
+	
 	
 	@Autowired
 	UserInterface uinter;
@@ -45,13 +43,13 @@ public class CommonController {
 	@GetMapping("/product/viewall")
 	public ResponseEntity<List<Products>> getAllProducts()
 	{
-		return new ResponseEntity<List<Products>>(pinter.viewAll(),HttpStatus.OK);
+		return new ResponseEntity<List<Products>>(cser.viewAll(),HttpStatus.OK);
 	}
 	
 	@GetMapping("/product/viewbyname/{product_name}")
 	public ResponseEntity<Products> viewByName(@PathVariable String product_name)
 	{
-		return new ResponseEntity<Products>(pinter.viewByName(product_name),HttpStatus.OK);
+		return new ResponseEntity<Products>(cser.viewByName(product_name),HttpStatus.OK);
 	}
 	@PostMapping("/user/add")
 	public ResponseEntity<Response> addUser(@RequestBody Users u)
@@ -71,13 +69,13 @@ public class CommonController {
 	@GetMapping("/product/sort/{path}")
 	public ResponseEntity<List<Products>> getProductsByReqOrder(@PathVariable("path") String path)
 	{
-		List<Products> result=pinter.getProductsByReqOrder(path);
+		List<Products> result=cser.getProductsByReqOrder(path);
 		return new ResponseEntity<List<Products>>(result,HttpStatus.OK);
 	}
 	
 	@GetMapping("/product/search/{name}")
 	public ResponseEntity<List<Products>> getProducts(@PathVariable("name") String name)
 	{
-		return new ResponseEntity<>(pinter.getProductsBySearch(name),HttpStatus.OK);
+		return new ResponseEntity<>(cser.getProductsBySearch(name),HttpStatus.OK);
 	}
 }

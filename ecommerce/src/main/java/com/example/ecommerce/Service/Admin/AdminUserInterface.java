@@ -11,13 +11,15 @@ public interface AdminUserInterface {
 
 
 	public boolean addUser(Users u);
-	public boolean deleteUser(String uname);
+	public boolean deleteUser(long uname);
 	public List<Users> viewBlockUsersList();
 	public List<Users> viewAllUsers();
 	public List<Users> viewNewUsersList();
 	public List<Users> getUsersOrdered();
 //	public boolean deleteOrders();
 	public boolean updateOrders(String uname,List<updateOrdersDto> c);
-	public boolean updateUser(String u);
+	public boolean updateUser(long u,String msg);
 	public Response getOrdersCountByDay(Date d1,Date d2);
+	public Response getOrdersCountByCategory(String cat);
+	public Response getOrderCountByCatAndName(String c,String n);
 }

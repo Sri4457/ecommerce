@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.ecommerce.Dto.Response;
 import com.example.ecommerce.Dto.UserOrderDto;
-import com.example.ecommerce.Model.Products;
+import com.example.ecommerce.Model.Cart;
 import com.example.ecommerce.Model.Users;
 import com.example.ecommerce.Service.Common.CommonInterface;
 import com.example.ecommerce.Service.User.UserInterface;
@@ -38,10 +38,16 @@ public class UserController {
 		return new ResponseEntity<Response>(uinter.forgetPassword(uname),HttpStatus.OK);
 	}
 	
-	@PostMapping("/submitcart/{username}")
-	public ResponseEntity<List<Response>> submitCart(@PathVariable("username") String uname,@RequestBody List<Products> prods)
+	@PostMapping("/addtocart")
+	public ResponseEntity<Response> addToCart(@RequestBody Cart c)
 	{
-		return new ResponseEntity<List<Response>>(uinter.submitProducts(uname, prods),HttpStatus.OK);
+		return new ResponseEntity<Response>(uinter.addToCart(c),HttpStatus.OK);
+	}
+	
+	@PostMapping("/submitcart")
+	public ResponseEntity<List<Response>> submitcart(@RequestBody List<Long> c)
+	{
+		return new ResponseEntity<>(uinter.submitCart(c),HttpStatus.OK);
 	}
 	@GetMapping("/orders/vieworders/{uname}")
 	public ResponseEntity<List<UserOrderDto>> viewOrders(@PathVariable String uname)

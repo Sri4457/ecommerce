@@ -2,13 +2,12 @@ package com.example.ecommerce.Model;
 
 import java.sql.Date;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
+
 
 
 @Entity
@@ -30,19 +29,38 @@ public class Orders {
 	@Column(name="cost",nullable=false)
 	private double cost;
 	
-	@OneToOne(cascade = CascadeType.ALL)
-	private Products p;
+	@Column(name="pname", nullable=false)
+	private String pname;
+	
+	@Column(name="category" , nullable=false)
+	private String category;
+	
+	@Column(name="pcost", nullable=false)
+	private double pcost;
 	
 	
-	public Orders(Date time, String order_status, int quantity, double cost, Products p) {
+	
+
+	public double getPcost() {
+		return pcost;
+	}
+
+	public void setPcost(double pcost) {
+		this.pcost = pcost;
+	}
+
+	public Orders(Date time, String order_status, int quantity, double cost, String pname, String category,
+			double pcost) {
 		super();
 		this.time = time;
 		this.order_status = order_status;
 		this.quantity = quantity;
 		this.cost = cost;
-		this.p = p;
+		this.pname = pname;
+		this.category = category;
+		this.pcost = pcost;
 	}
-	
+
 	public Orders() {
 		
 	}
@@ -83,14 +101,22 @@ public class Orders {
 		this.cost = cost;
 	}
 
-	public Products getP() {
-		return p;
+	public String getPname() {
+		return pname;
 	}
 
-	public void setP(Products p) {
-		this.p = p;
+	public void setPname(String pname) {
+		this.pname = pname;
 	}
-	
-	
+
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
+	}
+
+
 	
 }

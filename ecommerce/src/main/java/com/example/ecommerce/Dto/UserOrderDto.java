@@ -5,7 +5,7 @@ public class UserOrderDto {
 	private long id;
 	String status,pname,uname,category;
 	private int qty;
-	private double price;
+	private double pcost,totalcost;
 	public long getId() {
 		return id;
 	}
@@ -42,12 +42,19 @@ public class UserOrderDto {
 	public void setQty(int qty) {
 		this.qty = qty;
 	}
-	public double getPrice() {
-		return price;
+	public double getPcost() {
+		return pcost;
 	}
-	public void setPrice(double price) {
-		this.price = price;
+	public void setPcost(double pcost) {
+		this.pcost = pcost;
 	}
+	public double getTotalcost() {
+		return totalcost;
+	}
+	public void setTotalcost(double totalcost) {
+		this.totalcost = totalcost;
+	}
+	
 	
 	
 	
