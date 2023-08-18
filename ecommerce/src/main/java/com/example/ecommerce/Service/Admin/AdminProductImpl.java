@@ -75,10 +75,8 @@ public class AdminProductImpl implements AdminProductInterface{
 	public boolean updateProduct(Products p) {
 		boolean b=false;
 		try {
-			Products prod=prepo.findByName(p.getName());
-			if(p.getCount()!=0)
-			prod.setCount(prod.getCount()+p.getCount());
-			if(p.getPrice()!=0)
+			Products prod=prepo.getByNameAndcategory(p.getName().toLowerCase(), p.getCategory().toLowerCase());
+			prod.setCount(p.getCount());
 			prod.setPrice(p.getPrice());
 			prepo.save(prod);
 			b=true;

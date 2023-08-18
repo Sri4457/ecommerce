@@ -34,6 +34,7 @@ public class CommonController {
 	@Autowired
 	AdminUserInterface adinter;
 	
+	
 	@PostMapping("/login")
 	public ResponseEntity<Response> login(@RequestBody Users u)
 	{

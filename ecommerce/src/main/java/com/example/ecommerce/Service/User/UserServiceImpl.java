@@ -89,12 +89,8 @@ public class UserServiceImpl implements UserInterface {
 	@Override
 	public boolean UpdateProfile(Users u) {
 		Users user=urepo.findByUsername(u.getUsername());
-		if(u.getEmail()!=null)
-			user.setEmail(u.getEmail());
-		if(u.getOrders()!=null)
-			user.setOrders(u.getOrders());
-		if(u.getPassword()!=null)
-			user.setPassword(u.getPassword());
+		user.setEmail(u.getEmail());
+		user.setPassword(u.getPassword());
 		boolean b=false;
 		String msg=null;
 		try
@@ -226,6 +222,9 @@ public class UserServiceImpl implements UserInterface {
 		return res;
 	}
 
+	
+
+	
 	
 
 }

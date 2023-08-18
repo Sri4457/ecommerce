@@ -31,6 +31,12 @@ public class UserController {
 	
 	@Autowired
 	CommonInterface pinter;
+	@GetMapping("/{username}")
+	public ResponseEntity<Users> getUserByUname(@PathVariable String username)
+	{
+		return new ResponseEntity<>(uinter.getByUname(username),HttpStatus.OK);
+	}
+	
 	
 	@PostMapping("/forgetpassword/{uname}")
 	public ResponseEntity<Response> sendPassword(@PathVariable("uname") String uname)
