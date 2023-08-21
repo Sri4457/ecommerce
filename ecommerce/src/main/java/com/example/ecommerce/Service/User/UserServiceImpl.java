@@ -109,15 +109,14 @@ public class UserServiceImpl implements UserInterface {
 	}
 
 	@Override
-	public Users getByUname(String uname) {
+	public Users getById(long id) {
 		
-		return urepo.findByUsername(uname);
+		return urepo.findById(id).get();
 	}
 
-	private boolean checkProducts(Products pdto)
+	private boolean checkProducts(int count,int qty)
 	{
-		Products p=prepo.findByName(pdto.getName());
-		if(p.getCount()>=pdto.getCount())
+		if(count>=qty)
 			return true;
 		else
 			return false;
@@ -129,8 +128,8 @@ public class UserServiceImpl implements UserInterface {
 	}
 
 	@Override
-	public List<UserOrderDto> getOrderByUname(String uname) {
-		List<Orders> list=urepo.findByUsername(uname).getOrders();
+	public List<UserOrderDto> getOrderByUId(long id) {
+		List<Orders> list=urepo.findById(id).get().getOrders();
 		List<UserOrderDto> o=new ArrayList<>();
 		for(int i=0;i<list.size();i++)
 		{
@@ -141,7 +140,7 @@ public class UserServiceImpl implements UserInterface {
 			obj.setTotalcost(list.get(i).getCost());
 			obj.setPcost(list.get(i).getPcost());
 			obj.setStatus(list.get(i).getOrder_status());
-			obj.setUname(uname);
+			obj.setUname(urepo.findById(id).get().getUsername());
 			o.add(obj);
 		}
 		return o;
@@ -150,19 +149,40 @@ public class UserServiceImpl implements UserInterface {
 	@Override
 	public Response addToCart(Cart list) {
 		try {
-			crepo.save(list);
-			return new Response(false,"Added to cart");
+			Products p=prepo.getByNameAndcategory(list.getProductname(), list.getProductcat());
+			Cart c=crepo.findByUIdPNamePCat(list.getUserid(), list.getProductname(), list.getProductcat());
+			if(c==null)
+			{
+				if(checkProducts(p.getCount(),list.getQty()))
+				{
+					crepo.save(list);
+					return new Response(false,"Cart added Successfully");
+				}
+				else {
+					return new Response(true,"Stock is less");
+				}
+			}
+			else {
+				if(checkProducts(p.getCount(),list.getQty()+c.getQty()))
+				{
+					c.setQty(list.getQty()+c.getQty());
+					crepo.save(c);
+					return new Response(false,"Cart added Successfully");
+				}
+				else {
+					return new Response(true,"Stock is less");
+				}
+			}
 		}
-		catch(Exception e)
-		{
+		catch(Exception e)		{
 			System.out.println(e);
 		}
-		return new Response(true,"Somwthing went Wrong");
+		return new Response(true,"Something went Wrong");
 	}
 
 	@Override
-	public List<Response> submitCart(List<Long> list) {
-		Users u=urepo.findById(crepo.findById(list.get(0)).get().getUserid()).get();
+	public List<Response> submitCart(List<Cart> list) {
+		Users u=urepo.findById(list.get(0).getUserid()).get();
 		List<Response> res=new ArrayList<>();
 		try
 		{
@@ -172,27 +192,28 @@ public class UserServiceImpl implements UserInterface {
 				double price=0;
 				for(int i=0;i<list.size();i++)
 				{
-					Cart c=crepo.findById(list.get(i)).get();
+					Cart c=list.get(i);
 					Orders o=new Orders();
 					o.setOrder_status("ordered");
 					o.setQuantity(c.getQty());
-					o.setPname(prepo.findById(c.getProductid()).get().getName());
-					o.setCategory(prepo.findById(c.getProductid()).get().getCategory());
-					o.setPcost(prepo.findById(c.getProductid()).get().getPrice());
+					Products p=prepo.getByNameAndcategory(c.getProductname(), c.getProductcat());
+					o.setPname(p.getName());
+					o.setCategory(p.getCategory());
+					o.setPcost(p.getPrice());
 					o.setTime(java.sql.Date.valueOf(LocalDate.now()));
-					o.setCost(c.getQty()*(prepo.findById(c.getProductid())).get().getPrice());
+					o.setCost(c.getQty()*(p.getPrice()));
 					List<Orders> l=u.getOrders();
 					l.add(o);
 					u.setOrders(l);
-					if(checkProducts(prepo.findById(c.getProductid()).get()))
+					if(checkProducts(p.getCount(),c.getQty()))
 					{
 						Response r=new Response(false,"The Product with name "+o.getPname()+" is ordered");
-						updateProducts(prepo.findById(c.getProductid()).get());
+						updateProducts(p);
 						msg+="The Product Name "+o.getPname()+" in successfully ordered.\n";
 						urepo.save(u);
 						price+=o.getCost();
 						res.add(r);
-						crepo.deleteById(list.get(i));
+						crepo.deleteById(c.getId());
 					}
 					else
 					{
@@ -222,6 +243,55 @@ public class UserServiceImpl implements UserInterface {
 		return res;
 	}
 
+	@Override
+	public List<Cart> getCartByUId(long uid) {
+		return crepo.findByUserid(uid);
+	}
+
+	@Override
+	public Response deleteCartElement(long id) {
+		try {
+			crepo.deleteById(id);
+			return new Response(false,"Deleted item from cart");
+		}
+		catch(Exception e)
+		{
+			return new Response(true,"Unable to delete item from cart try again!!!!!");
+		}
+	}
+
+	@Override
+	public Response updateCart(Cart c) {
+		try {
+			Cart c1=crepo.findById(c.getId()).get();
+			Products p=prepo.getByNameAndcategory(c.getProductname(), c.getProductcat());
+			if(checkProducts(p.getCount(),c.getQty()))
+			{
+				c1.setQty(c.getQty());
+				crepo.save(c1);
+				return new Response(false,"Cart Item Updated Successfully");
+			}
+			else {
+				return new Response(true,"Stock is less");
+			}
+		}
+		catch(Exception e)
+		{
+			return new Response(true,"Something Went Wrong");
+		}
+	}
+
+	@Override
+	public Cart getCartByCartId(long id) {
+		return crepo.findById(id).get();
+	}
+
+	@Override
+	public long getIdByUname(String uname) {
+		return urepo.findByUsername(uname).getId();
+	}
+
+	
 	
 
 	

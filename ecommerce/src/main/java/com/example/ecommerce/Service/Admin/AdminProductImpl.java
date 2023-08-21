@@ -40,7 +40,7 @@ public class AdminProductImpl implements AdminProductInterface{
 		{
 			for(Products p:list)
 			{
-				prepo.delete(p);
+				prepo.deleteById(p.getId());
 				b=true;
 			}
 		}

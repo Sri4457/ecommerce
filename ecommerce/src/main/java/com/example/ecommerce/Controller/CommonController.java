@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.ecommerce.Dto.LoginResponse;
 import com.example.ecommerce.Dto.Response;
 import com.example.ecommerce.Model.Products;
 import com.example.ecommerce.Model.Users;
@@ -36,9 +37,9 @@ public class CommonController {
 	
 	
 	@PostMapping("/login")
-	public ResponseEntity<Response> login(@RequestBody Users u)
+	public ResponseEntity<LoginResponse> login(@RequestBody Users u)
 	{
-		Response response=cser.login(u);
+		LoginResponse response=cser.login(u);
 		return new ResponseEntity<>(response,HttpStatus.OK);
 	}
 	@GetMapping("/product/viewall")
@@ -47,10 +48,10 @@ public class CommonController {
 		return new ResponseEntity<List<Products>>(cser.viewAll(),HttpStatus.OK);
 	}
 	
-	@GetMapping("/product/viewbyname/{product_name}")
-	public ResponseEntity<Products> viewByName(@PathVariable String product_name)
+	@GetMapping("/product/viewbyid/{product_id}")
+	public ResponseEntity<Products> viewByName(@PathVariable long id)
 	{
-		return new ResponseEntity<Products>(cser.viewByName(product_name),HttpStatus.OK);
+		return new ResponseEntity<Products>(cser.getByPId(id),HttpStatus.OK);
 	}
 	@PostMapping("/user/add")
 	public ResponseEntity<Response> addUser(@RequestBody Users u)

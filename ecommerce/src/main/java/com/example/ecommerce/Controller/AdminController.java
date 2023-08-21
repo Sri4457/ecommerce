@@ -22,6 +22,7 @@ import com.example.ecommerce.Service.Common.CommonInterface;
 import com.example.ecommerce.Dto.DateDto;
 import com.example.ecommerce.Dto.updateOrdersDto;
 import com.example.ecommerce.Dto.Response;
+import com.example.ecommerce.Model.Orders;
 import com.example.ecommerce.Model.Products;
 import com.example.ecommerce.Model.Users;
 
@@ -160,17 +161,23 @@ public class AdminController {
 		return new ResponseEntity<List<Users>>(auinter.viewBlockUsersList(),HttpStatus.OK);
 	}
 	
+	@GetMapping("/user/viewordersbyuid/{id}")
+	public ResponseEntity<List<Orders>> getOrdersByUid(@PathVariable long id)
+	{
+		return new ResponseEntity<>(auinter.getOrdersByUid(id),HttpStatus.OK);
+	}
+	
 	@GetMapping("/user/viewuserorders")
 	public ResponseEntity<List<Users>> getUserOrders()
 	{
 		return new ResponseEntity<List<Users>>(auinter.getUsersOrdered(),HttpStatus.OK);
 	}
 	
-	@PutMapping("/orders/updateorder/{uname}")
-	public ResponseEntity<Response> updateOrders(@PathVariable("uname") String uname,@RequestBody List<updateOrdersDto> p)
+	@PutMapping("/orders/updateorder/{id}")
+	public ResponseEntity<Response> updateOrders(@PathVariable("id") long id,@RequestBody updateOrdersDto p)
 	{
 		Response response=null;
-		boolean b=auinter.updateOrders(uname, p);
+		boolean b=auinter.updateOrders(id, p);
 		if(b==false)
 			response=new Response(true,"Something Went Wrong");
 		else

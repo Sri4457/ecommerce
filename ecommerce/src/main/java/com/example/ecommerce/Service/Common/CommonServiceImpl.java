@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import com.example.ecommerce.Dto.Response;
+import com.example.ecommerce.Dto.LoginResponse;
 import com.example.ecommerce.Model.Products;
 import com.example.ecommerce.Model.Users;
 import com.example.ecommerce.Repository.ProductRepo;
@@ -27,10 +27,7 @@ public class CommonServiceImpl implements CommonInterface{
 		return prepo.findAll();
 	}
 
-	@Override
-	public Products viewByName(String name) {
-		return prepo.findByName(name);
-	}
+	
 
 	
 
@@ -58,34 +55,42 @@ public class CommonServiceImpl implements CommonInterface{
 	}
 	
 	@Override
-	public Response login(Users u) {
-		Response res=null;
+	public LoginResponse login(Users u) {
 		try 
 		{
 			Users user=urepo.findByUsername(u.getUsername());
 			if(user==null)
 			{
-				res=new Response(true,"User not exit with the Username you provided");
+				return new LoginResponse(true,"No User Exists",0);
 			}
 			else
 			{
 				String pass=user.getPassword();
 				if(pass.equals(u.getPassword()))
 				{
-					res=new Response(false,"Login Successfull");
+					return new LoginResponse(false,"Login Successful",user.getId());
 				}
 				else
 				{
-					res=new Response(true,"Password you provided is wrong");
+					return new LoginResponse(true,"Password Entered Wrong",0);
 				}
 			}
 		}
 		catch(Exception e)
 		{
-			res=new Response(true,"Sonething Went Wrong");
 			System.out.println(e);
+			return new LoginResponse(true,"Something Went Wrong",0);
 		}
-		return res;
+	}
+
+
+
+
+
+	@Override
+	public Products getByPId(long id) {
+		
+		return prepo.findById(id).get();
 	}
 	
 	

@@ -1,7 +1,6 @@
 package com.example.ecommerce.Service.Admin;
 
 import java.sql.Date;
-import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -130,13 +129,9 @@ public class AdminUserServiceImpl implements AdminUserInterface{
 //	}
 
 	@Override
-	public boolean updateOrders(String uname, List<updateOrdersDto> c) {
-		Users u=urepo.findByUsername(uname);
+	public boolean updateOrders(long id, updateOrdersDto c) {
+		Users u=urepo.findById(id).get();
 		List<Orders> l=u.getOrders();
-		HashMap<String,String> map=new HashMap<>();
-		for(int i=0;i<c.size();i++)
-			map.put(c.get(i).getPname()+c.get(i).getCategory(), c.get(i).getStatus());
-		System.out.println(map);
 		boolean b=false;
 		try 
 		{
@@ -144,9 +139,9 @@ public class AdminUserServiceImpl implements AdminUserInterface{
 			for(Orders o:l)
 			{
 				
-				if(map.containsKey((o.getPname()+o.getCategory())))
+				if(o.getId()==c.getId())
 				{
-					o.setOrder_status(map.get((o.getPname()+o.getCategory())));
+					o.setOrder_status(c.getStatus());
 					msg+="The Product Name "+o.getPname()+" in your order is "+o.getOrder_status()+".\n";
 					b=true;
 				}
@@ -198,6 +193,11 @@ public class AdminUserServiceImpl implements AdminUserInterface{
 		else {
 			return new Response(false,"The Number Orders for the "+c+" Category with the Product Name "+n+" : "+count);
 		}
+	}
+
+	@Override
+	public List<Orders> getOrdersByUid(long id) {
+		return urepo.findById(id).get().getOrders();
 	}
 
 	

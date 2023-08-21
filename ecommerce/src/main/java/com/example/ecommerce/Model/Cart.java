@@ -17,8 +17,14 @@ public class Cart {
 	@Column(name="userid",nullable=false)
 	private long userid;
 	
-	@Column(name="productid",nullable=false)
-	private long productid;
+	@Column(name="productname",nullable=false)
+	private String productname;
+	
+	@Column(name="productcat",nullable=false)
+	private String productcat;
+	
+	@Column(name="price",nullable=false)
+	private double price;
 	
 	@Column(name="qty",nullable=false)
 	private int qty;
@@ -39,12 +45,29 @@ public class Cart {
 		this.userid = userid;
 	}
 
-	public long getProductid() {
-		return productid;
+	
+	public String getProductname() {
+		return productname;
 	}
 
-	public void setProductid(long productid) {
-		this.productid = productid;
+	public void setProductname(String productname) {
+		this.productname = productname;
+	}
+
+	public String getProductcat() {
+		return productcat;
+	}
+
+	public void setProductcat(String productcat) {
+		this.productcat = productcat;
+	}
+
+	public double getPrice() {
+		return price;
+	}
+
+	public void setPrice(double price) {
+		this.price = price;
 	}
 
 	public int getQty() {
