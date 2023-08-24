@@ -81,7 +81,7 @@ public class UserController {
 	}
 	
 	@PostMapping("/submitcart")
-	public ResponseEntity<List<Response>> submitcart(@RequestBody List<Cart> c)
+	public ResponseEntity<Response> submitcart(@RequestBody List<Cart> c)
 	{
 		return new ResponseEntity<>(uinter.submitCart(c),HttpStatus.OK);
 	}

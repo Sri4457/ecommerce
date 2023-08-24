@@ -181,9 +181,9 @@ public class UserServiceImpl implements UserInterface {
 	}
 
 	@Override
-	public List<Response> submitCart(List<Cart> list) {
+	public Response submitCart(List<Cart> list) {
 		Users u=urepo.findById(list.get(0).getUserid()).get();
-		List<Response> res=new ArrayList<>();
+		
 		try
 		{
 			if(!u.getUserstatus().equalsIgnoreCase("blocked")) 
@@ -197,50 +197,62 @@ public class UserServiceImpl implements UserInterface {
 					o.setOrder_status("ordered");
 					o.setQuantity(c.getQty());
 					Products p=prepo.getByNameAndcategory(c.getProductname(), c.getProductcat());
-					o.setPname(p.getName());
-					o.setCategory(p.getCategory());
-					o.setPcost(p.getPrice());
-					o.setTime(java.sql.Date.valueOf(LocalDate.now()));
-					o.setCost(c.getQty()*(p.getPrice()));
-					List<Orders> l=u.getOrders();
-					l.add(o);
-					u.setOrders(l);
-					if(checkProducts(p.getCount(),c.getQty()))
+					if(p!=null)
 					{
-						Response r=new Response(false,"The Product with name "+o.getPname()+" is ordered");
-						updateProducts(p);
-						msg+="The Product Name "+o.getPname()+" in successfully ordered.\n";
-						urepo.save(u);
-						price+=o.getCost();
-						res.add(r);
-						crepo.deleteById(c.getId());
+						o.setPname(p.getName());
+						o.setCategory(p.getCategory());
+						o.setPcost(p.getPrice());
+						o.setTime(java.sql.Date.valueOf(LocalDate.now()));
+						o.setCost(c.getQty()*(p.getPrice()));
+						List<Orders> l=u.getOrders();
+						l.add(o);
+						u.setOrders(l);
+						if(checkProducts(p.getCount(),c.getQty()))
+						{
+							
+							updateProducts(p);
+							msg+="The Product Name "+o.getPname()+" in successfully ordered.\n";
+							urepo.save(u);
+							price+=o.getCost();
+							
+							
+						}
+						else
+						{
+							msg+="The Product with name "+o.getPname()+" is not ordered as the products are not avaliable to your provided Quantity";
+							
+						}
 					}
-					else
-					{
-						Response r=new Response(true,"The Product with name "+o.getPname()+" is not ordered as the products are not avaliable to your provided Quantity");
-						res.add(r);
+					else {
+						msg+="Product"+o.getPname()+" is no more avaliable";
+						
 					}
+					crepo.deleteById(c.getId());
+					
 				}
 				if(msg.length()==0)
+				{
 					es.notifyUser(u.getEmail(), "Some Thing Went wrong while ordering please try again", "Notifying Mail");
+					return new Response(true,"Some Thing Went wrong while ordering please try again");
+				}
 				else
 				{
 					msg+=" With the Total Cost is : "+price;
 					es.notifyUser(u.getEmail(), msg, "Ordered Mail");
+					return new Response(false,msg);
 				}
 			}
 			else {
 				Response response=new Response(true,"Still you are not released by Admin" );
-				res.add(response);
+				return response;
 			}
 		}
 		catch(Exception e)
 		{
 			Response response=new Response(true,"Something Went wrong try again");
-			res.add(response);
 			System.out.println(e);
+			return response;
 		}
-		return res;
 	}
 
 	@Override

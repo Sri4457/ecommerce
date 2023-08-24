@@ -30,6 +30,6 @@ public interface UserInterface {
 	
 	
 	public List<UserOrderDto> getOrderByUId(long id);
-	public List<Response> submitCart(List<Cart> list);
+	public Response submitCart(List<Cart> list);
 	
 }
