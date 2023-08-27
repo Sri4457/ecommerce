@@ -1,14 +1,12 @@
 package com.example.ecommerce.Service.User;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.ecommerce.Dto.Response;
-import com.example.ecommerce.Dto.UserOrderDto;
 import com.example.ecommerce.Model.Cart;
 import com.example.ecommerce.Model.Orders;
 import com.example.ecommerce.Model.Products;
@@ -58,7 +56,8 @@ public class UserServiceImpl implements UserInterface {
 		{
 			Users u=urepo.findByUsername(username);
 			String msg="The Password you created for your account is : "+u.getPassword();
-			try{
+			try
+			{
 				es.notifyUser(u.getEmail(),msg , "Forget Password");
 				response=new Response(false,"Password Sent to Email");
 			}
@@ -121,29 +120,15 @@ public class UserServiceImpl implements UserInterface {
 		else
 			return false;
 	}
-	private void updateProducts(Products list) {
-		Products p=prepo.findByName(list.getName());
-		p.setCount((p.getCount())-list.getCount());
+	private void updateProducts(Products p,int qty) {
+		p.setCount((p.getCount())-qty);
 		prepo.save(p);
 	}
 
 	@Override
-	public List<UserOrderDto> getOrderByUId(long id) {
+	public List<Orders> getOrderByUId(long id) {
 		List<Orders> list=urepo.findById(id).get().getOrders();
-		List<UserOrderDto> o=new ArrayList<>();
-		for(int i=0;i<list.size();i++)
-		{
-			UserOrderDto obj=new UserOrderDto();
-			obj.setId(list.get(i).getId());
-			obj.setPname(list.get(i).getPname());
-			obj.setQty(list.get(i).getQuantity());
-			obj.setTotalcost(list.get(i).getCost());
-			obj.setPcost(list.get(i).getPcost());
-			obj.setStatus(list.get(i).getOrder_status());
-			obj.setUname(urepo.findById(id).get().getUsername());
-			o.add(obj);
-		}
-		return o;
+		return list;
 	}
 
 	@Override
@@ -210,7 +195,7 @@ public class UserServiceImpl implements UserInterface {
 						if(checkProducts(p.getCount(),c.getQty()))
 						{
 							
-							updateProducts(p);
+							updateProducts(p,o.getQuantity());
 							msg+="The Product Name "+o.getPname()+" in successfully ordered.\n";
 							urepo.save(u);
 							price+=o.getCost();

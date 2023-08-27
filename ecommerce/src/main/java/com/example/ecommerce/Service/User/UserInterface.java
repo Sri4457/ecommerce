@@ -3,8 +3,8 @@ package com.example.ecommerce.Service.User;
 import java.util.List;
 
 import com.example.ecommerce.Dto.Response;
-import com.example.ecommerce.Dto.UserOrderDto;
 import com.example.ecommerce.Model.Cart;
+import com.example.ecommerce.Model.Orders;
 import com.example.ecommerce.Model.Products;
 import com.example.ecommerce.Model.Users;
 
@@ -29,7 +29,7 @@ public interface UserInterface {
 	public Cart getCartByCartId(long id);
 	
 	
-	public List<UserOrderDto> getOrderByUId(long id);
+	public List<Orders> getOrderByUId(long id);
 	public Response submitCart(List<Cart> list);
 	
 }

@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.ecommerce.Dto.Response;
-import com.example.ecommerce.Dto.UserOrderDto;
 import com.example.ecommerce.Model.Cart;
+import com.example.ecommerce.Model.Orders;
 import com.example.ecommerce.Model.Users;
 import com.example.ecommerce.Service.Common.CommonInterface;
 import com.example.ecommerce.Service.User.UserInterface;
@@ -43,7 +43,7 @@ public class UserController {
 	{
 		return new ResponseEntity<>(uinter.getIdByUname(uname),HttpStatus.OK);
 	}
-	@PostMapping("/forgetpassword/{uname}")
+	@GetMapping("/forgetpassword/{uname}")
 	public ResponseEntity<Response> sendPassword(@PathVariable("uname") String uname)
 	{
 		return new ResponseEntity<Response>(uinter.forgetPassword(uname),HttpStatus.OK);
@@ -86,10 +86,10 @@ public class UserController {
 		return new ResponseEntity<>(uinter.submitCart(c),HttpStatus.OK);
 	}
 	@GetMapping("/orders/vieworders/{id}")
-	public ResponseEntity<List<UserOrderDto>> viewOrders(@PathVariable long id)
+	public ResponseEntity<List<Orders>> viewOrders(@PathVariable long id)
 	{
-		List<UserOrderDto> list=uinter.getOrderByUId(id);
-		return new ResponseEntity<List<UserOrderDto>>(list,HttpStatus.OK);
+		List<Orders> list=uinter.getOrderByUId(id);
+		return new ResponseEntity<List<Orders>>(list,HttpStatus.OK);
 	}
 	@PutMapping("/update")
 	public ResponseEntity<Response> updateUser(@RequestBody Users u)
