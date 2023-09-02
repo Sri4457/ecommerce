@@ -18,4 +18,7 @@ public interface OrdersRepo extends JpaRepository<Orders,Long>{
 	
 	@Query(value="select count(id) from orders group by category=?1 and pname=?2 ",nativeQuery=true)
 	int getCountByCategoryAndName(String category,String name);
+	
+	@Query(value="select users_id from users_orders where orders_id =?1",nativeQuery = true)
+	Long getUseridForOrderId(long id);
 }

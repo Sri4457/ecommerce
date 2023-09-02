@@ -1,6 +1,7 @@
 package com.example.ecommerce.Service.Admin;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.example.ecommerce.Dto.updateOrdersDto;
 import com.example.ecommerce.Dto.DateDto;
 import com.example.ecommerce.Dto.Response;
+import com.example.ecommerce.Dto.ViewOrdersDto;
 import com.example.ecommerce.Model.Orders;
 import com.example.ecommerce.Model.Users;
 import com.example.ecommerce.Repository.OrdersRepo;
@@ -162,20 +164,32 @@ public class AdminUserServiceImpl implements AdminUserInterface{
 	}
 
 	@Override
-	public Response getOrdersCountByDay(DateDto d) {
-		Response response=null;
+	public List<ViewOrdersDto> getOrdersCountByDayAndCat(DateDto d) {
 		try {
 			Date d1=Date.valueOf(d.getDateone());
 			Date d2=Date.valueOf(d.getDatetwo());
-			int count=orepo.getCountByDate(d1, d2,d.getCategory()).size();
-			response=new Response(false,"The Total orders between specific dates "+d1+" and "+d2+" and under the category : "+d.getCategory()+" are : "+count);
+			List<Orders> orders=orepo.getCountByDate(d1, d2,d.getCategory());
+			List<ViewOrdersDto> result=new ArrayList<>();
+			for(Orders o:orders)
+			{
+				ViewOrdersDto v=new ViewOrdersDto();
+				v.setCategory(o.getCategory());
+				v.setCost(o.getCost());
+				v.setId(o.getId());
+				v.setOrder_status(o.getOrder_status());
+				v.setPcost(o.getPcost());
+				v.setUid(orepo.getUseridForOrderId(o.getId()));
+				v.setQuantity(o.getQuantity());
+				v.setPname(o.getPname());
+				result.add(v);
+			}
+			return result;
 		}
 		catch(Exception e)
 		{
 			System.out.println(e);
-			response=new Response(true, "Something Went Wrong while fetching count of orders on specific date");
+			return null;
 		}
-		return response;
 	}
 
 	@Override
@@ -201,6 +215,34 @@ public class AdminUserServiceImpl implements AdminUserInterface{
 	@Override
 	public List<Orders> getOrdersByUid(long id) {
 		return urepo.findById(id).get().getOrders();
+	}
+
+	@Override
+	public List<ViewOrdersDto> getAllOrders() {
+		try {
+			
+			List<Orders> orders=orepo.findAll();
+			List<ViewOrdersDto> result=new ArrayList<>();
+			for(Orders o:orders)
+			{
+				ViewOrdersDto v=new ViewOrdersDto();
+				v.setCategory(o.getCategory());
+				v.setCost(o.getCost());
+				v.setId(o.getId());
+				v.setOrder_status(o.getOrder_status());
+				v.setPcost(o.getPcost());
+				v.setUid(orepo.getUseridForOrderId(o.getId()));
+				v.setQuantity(o.getQuantity());
+				v.setPname(o.getPname());
+				result.add(v);
+			}
+			return result;
+		}
+		catch(Exception e)
+		{
+			System.out.println(e);
+			return null;
+		}
 	}
 
 	

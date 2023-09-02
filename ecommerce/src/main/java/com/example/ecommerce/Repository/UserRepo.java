@@ -19,4 +19,6 @@ public interface UserRepo extends JpaRepository<Users,Long>{
 	@Query(value="select * from users where id>1",nativeQuery = true)
 	List<Users> getAllUsersExcpetAdmin();
 	
+	
+	
 }

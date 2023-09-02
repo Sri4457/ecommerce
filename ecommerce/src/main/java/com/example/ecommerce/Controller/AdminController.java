@@ -21,6 +21,7 @@ import com.example.ecommerce.Service.Common.CommonInterface;
 import com.example.ecommerce.Dto.DateDto;
 import com.example.ecommerce.Dto.updateOrdersDto;
 import com.example.ecommerce.Dto.Response;
+import com.example.ecommerce.Dto.ViewOrdersDto;
 import com.example.ecommerce.Model.Orders;
 import com.example.ecommerce.Model.Products;
 import com.example.ecommerce.Model.Users;
@@ -184,12 +185,18 @@ public class AdminController {
 		return new ResponseEntity<>(response,HttpStatus.OK);
 		
 	}
+	
+	@GetMapping("/viewallorders")
+	public ResponseEntity<List<ViewOrdersDto>> getAllOrders()
+	{
+		return new ResponseEntity<>(auinter.getAllOrders(),HttpStatus.OK);
+	}
 
 	@PostMapping("/countordersby")
-	public ResponseEntity<Response> getCountBySpecificDate(@RequestBody DateDto a)
+	public ResponseEntity<List<ViewOrdersDto>> getCountBySpecificDate(@RequestBody DateDto a)
 	{
 		System.out.println(a.getDatetwo());
 		
-		return new ResponseEntity<Response>(auinter.getOrdersCountByDay(a),HttpStatus.OK);
+		return new ResponseEntity<>(auinter.getOrdersCountByDayAndCat(a),HttpStatus.OK);
 	}
 }
