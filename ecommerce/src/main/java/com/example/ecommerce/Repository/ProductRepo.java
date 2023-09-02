@@ -19,4 +19,21 @@ public interface ProductRepo extends JpaRepository<Products,Long>{
 	
 	@Query(value="select * from products where name like ?1 ",nativeQuery=true)
 	List<Products> getByName(String name);
+	
+	
+	@Query(value="select * from products where category=?1 and  name like ?2 ",nativeQuery=true)
+	List<Products> getByNameByCategory(String category,String name);
+	
+	@Query(value="select distinct(category) from products ",nativeQuery = true)
+	List<String> getAllCategories();
+	
+	List<Products> findByCategory(String category);
+
+	@Query(value="select * from products p where category= :category order by CASE WHEN :sortField = 'name' THEN p.name END asc, CASE WHEN :sortField = 'count' THEN p.count END asc, CASE WHEN :sortField = 'price' THEN p.price END asc,CASE WHEN :sortField = 'date' THEN p.date END asc ",nativeQuery=true)
+	List<Products> findProductsByCatByAscOrder(String category, String sortField);
+	
+	@Query(value="select * from products p where category= :category order by CASE WHEN :sortField = 'name' THEN p.name END desc, CASE WHEN :sortField = 'count' THEN p.count END desc, CASE WHEN :sortField = 'price' THEN p.price END desc,CASE WHEN :sortField = 'date' THEN p.date END desc ",nativeQuery=true)
+	List<Products> findProductsByCatByDescOrder(String category, String sortField);
+	
+	
 }

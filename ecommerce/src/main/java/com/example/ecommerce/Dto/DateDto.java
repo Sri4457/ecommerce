@@ -2,7 +2,16 @@ package com.example.ecommerce.Dto;
 
 public class DateDto {
 
-	private String dateone,datetwo;
+	private String dateone,datetwo,category;
+	
+
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
+	}
 
 	public String getDateone() {
 		return dateone;

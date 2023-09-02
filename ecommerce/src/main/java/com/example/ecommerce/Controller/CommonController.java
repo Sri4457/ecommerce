@@ -20,7 +20,7 @@ import com.example.ecommerce.Service.Admin.AdminUserInterface;
 import com.example.ecommerce.Service.Common.CommonInterface;
 import com.example.ecommerce.Service.User.UserInterface;
 
-@CrossOrigin(origins="http://localhost:3000/")
+@CrossOrigin()
 @RestController
 public class CommonController {
 
@@ -48,6 +48,16 @@ public class CommonController {
 		return new ResponseEntity<List<Products>>(cser.viewAll(),HttpStatus.OK);
 	}
 	
+	@GetMapping("/product/viewallcategories")
+	public ResponseEntity<List<String>> getAllCategories(){
+		return new ResponseEntity<>(cser.getAllCategories(),HttpStatus.OK);
+	}
+	
+	@GetMapping("/product/getproductsbycategory/{category}")
+	public ResponseEntity<List<Products>> getAllProductsByCategory(@PathVariable String category)
+	{
+		return new ResponseEntity<List<Products>>(cser.getAllProductsByCategory(category),HttpStatus.OK);
+	}
 	@GetMapping("/product/viewbyid/{product_id}")
 	public ResponseEntity<Products> viewByName(@PathVariable long id)
 	{
@@ -76,8 +86,21 @@ public class CommonController {
 	}
 	
 	@GetMapping("/product/search/{name}")
-	public ResponseEntity<List<Products>> getProducts(@PathVariable("name") String name)
+	public ResponseEntity<List<Products>> getProductsByName(@PathVariable("name") String name)
 	{
 		return new ResponseEntity<>(cser.getProductsBySearch(name),HttpStatus.OK);
+	}
+	
+	@GetMapping("/product/sortbycategory/{category}/{path}")
+	public ResponseEntity<List<Products>> getProductsByCategoryByReqOrder(@PathVariable("category") String category,@PathVariable("path") String path)
+	{
+		
+		return new ResponseEntity<List<Products>>(cser.getProductsByCategoryByReqOrder(category, path),HttpStatus.OK);
+	}
+	
+	@GetMapping("/product/searchNameByCategory/{category}/{name}")
+	public ResponseEntity<List<Products>> getProductsByCategory(@PathVariable("category") String category,@PathVariable("name") String name)
+	{
+		return new ResponseEntity<>(cser.getProductsByCategoryBySearch(category, name),HttpStatus.OK);
 	}
 }

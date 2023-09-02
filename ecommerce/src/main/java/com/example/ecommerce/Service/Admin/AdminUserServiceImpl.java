@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.ecommerce.Dto.updateOrdersDto;
+import com.example.ecommerce.Dto.DateDto;
 import com.example.ecommerce.Dto.Response;
 import com.example.ecommerce.Model.Orders;
 import com.example.ecommerce.Model.Users;
@@ -87,7 +88,7 @@ public class AdminUserServiceImpl implements AdminUserInterface{
 
 	@Override
 	public List<Users> viewAllUsers() {
-		return urepo.findAll();
+		return urepo.getAllUsersExcpetAdmin();
 	}
 
 	@Override
@@ -161,11 +162,13 @@ public class AdminUserServiceImpl implements AdminUserInterface{
 	}
 
 	@Override
-	public Response getOrdersCountByDay(Date d1,Date d2) {
+	public Response getOrdersCountByDay(DateDto d) {
 		Response response=null;
 		try {
-			int count=orepo.getCountByDate(d1, d2).size();
-			response=new Response(false,"The Total orders between specific dates "+d1+" and "+d2+" are : "+count);
+			Date d1=Date.valueOf(d.getDateone());
+			Date d2=Date.valueOf(d.getDatetwo());
+			int count=orepo.getCountByDate(d1, d2,d.getCategory()).size();
+			response=new Response(false,"The Total orders between specific dates "+d1+" and "+d2+" and under the category : "+d.getCategory()+" are : "+count);
 		}
 		catch(Exception e)
 		{

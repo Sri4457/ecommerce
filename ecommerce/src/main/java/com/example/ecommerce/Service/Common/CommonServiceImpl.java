@@ -83,14 +83,48 @@ public class CommonServiceImpl implements CommonInterface{
 		}
 	}
 
-
-
-
-
 	@Override
 	public Products getByPId(long id) {
 		
 		return prepo.findById(id).get();
+	}
+
+	@Override
+	public List<String> getAllCategories() {
+		
+		return prepo.getAllCategories();
+	}
+
+	@Override
+	public List<Products> getAllProductsByCategory(String cat) {
+		return prepo.findByCategory(cat);
+	}
+
+	@Override
+	public List<Products> getProductsByCategoryByReqOrder(String category, String path) {
+		List<Products> list=null;
+		try
+		{
+			System.out.println(category+" "+path);
+			String[] s=path.split("-");
+			if(s[1].equalsIgnoreCase("asc"))
+				list=prepo.findProductsByCatByAscOrder(category,s[0]);
+			else if(s[1].equalsIgnoreCase("desc"))
+				list=prepo.findProductsByCatByDescOrder(category,s[0]);
+			for(int i=0;i<list.size();i++)
+			System.out.println(list.get(i).getPrice());
+		}
+		catch(Exception e)
+		{
+			System.out.println(e);
+		}
+		return list;
+	}
+
+	@Override
+	public List<Products> getProductsByCategoryBySearch(String category, String n) {
+		System.out.println(category+" "+n);
+		return prepo.getByNameByCategory(category, "%"+n+"%");
 	}
 	
 	

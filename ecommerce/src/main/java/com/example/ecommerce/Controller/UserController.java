@@ -22,7 +22,7 @@ import com.example.ecommerce.Model.Users;
 import com.example.ecommerce.Service.Common.CommonInterface;
 import com.example.ecommerce.Service.User.UserInterface;
 
-@CrossOrigin(origins="http://localhost:3000/")
+@CrossOrigin()
 @RestController()
 @RequestMapping("/user") 
 public class UserController {

@@ -15,5 +15,9 @@ public interface CommonInterface {
 	public Products getByPId(long name);
 	public List<Products> getProductsByReqOrder(String path);
 	public List<Products> getProductsBySearch(String n);
+	public List<String> getAllCategories();
+	public List<Products> getAllProductsByCategory(String cat);
+	public List<Products> getProductsByCategoryByReqOrder(String category,String path);
+	public List<Products> getProductsByCategoryBySearch(String category,String n);
 	
 }

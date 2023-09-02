@@ -90,12 +90,13 @@ public class UserServiceImpl implements UserInterface {
 		Users user=urepo.findByUsername(u.getUsername());
 		user.setEmail(u.getEmail());
 		user.setPassword(u.getPassword());
+		//user.setOrders(user.getOrders());
 		boolean b=false;
 		String msg=null;
 		try
 		{
 			msg="Your Pofile is updated successfully";
-			urepo.save(u);
+			urepo.save(user);
 			b=true;
 		}
 		catch(Exception e)

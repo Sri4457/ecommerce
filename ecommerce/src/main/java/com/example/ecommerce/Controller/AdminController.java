@@ -1,6 +1,5 @@
 package com.example.ecommerce.Controller;
 
-import java.sql.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +25,7 @@ import com.example.ecommerce.Model.Orders;
 import com.example.ecommerce.Model.Products;
 import com.example.ecommerce.Model.Users;
 
-@CrossOrigin(origins="http://localhost:3000/")
+@CrossOrigin()
 @RestController()
 @RequestMapping("/admin") 
 public class AdminController {
@@ -190,8 +189,7 @@ public class AdminController {
 	public ResponseEntity<Response> getCountBySpecificDate(@RequestBody DateDto a)
 	{
 		System.out.println(a.getDatetwo());
-		Date d1=Date.valueOf(a.getDateone());
-		Date d2=Date.valueOf(a.getDatetwo());
-		return new ResponseEntity<Response>(auinter.getOrdersCountByDay(d1,d2),HttpStatus.OK);
+		
+		return new ResponseEntity<Response>(auinter.getOrdersCountByDay(a),HttpStatus.OK);
 	}
 }
