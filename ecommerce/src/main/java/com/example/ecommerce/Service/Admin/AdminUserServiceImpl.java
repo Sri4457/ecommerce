@@ -34,12 +34,14 @@ public class AdminUserServiceImpl implements AdminUserInterface{
 	OrdersRepo orepo;
 
 	
+	
 	@Override
 	public boolean addUser(Users u) {
 		boolean b=false;
 		try {
+			
 			urepo.save(u);
-			String message="Thank you for choosing our ecommerce website. Thanks for Registering";
+			String message="Thank you for choosing our ecommerce website. Thanks for Registering\n Your Username: "+u.getUsername()+" and Password : "+u.getPassword();
 			es.notifyUser(u.getEmail(), message,"Welcoming Mail");
 			b=true;
 		}
@@ -181,6 +183,7 @@ public class AdminUserServiceImpl implements AdminUserInterface{
 				v.setUid(orepo.getUseridForOrderId(o.getId()));
 				v.setQuantity(o.getQuantity());
 				v.setPname(o.getPname());
+				v.setAddress(urepo.findById(orepo.getUseridForOrderId(o.getId())).get().getAddress());
 				result.add(v);
 			}
 			return result;
@@ -221,20 +224,26 @@ public class AdminUserServiceImpl implements AdminUserInterface{
 	public List<ViewOrdersDto> getAllOrders() {
 		try {
 			
-			List<Orders> orders=orepo.findAll();
+			List<Users> users=urepo.findAll();
 			List<ViewOrdersDto> result=new ArrayList<>();
-			for(Orders o:orders)
+			for(Users user:users)
 			{
-				ViewOrdersDto v=new ViewOrdersDto();
-				v.setCategory(o.getCategory());
-				v.setCost(o.getCost());
-				v.setId(o.getId());
-				v.setOrder_status(o.getOrder_status());
-				v.setPcost(o.getPcost());
-				v.setUid(orepo.getUseridForOrderId(o.getId()));
-				v.setQuantity(o.getQuantity());
-				v.setPname(o.getPname());
-				result.add(v);
+				List<Orders> orders=user.getOrders();
+				for(Orders o:orders)
+				{
+					ViewOrdersDto v=new ViewOrdersDto();
+					v.setCategory(o.getCategory());
+					v.setCost(o.getCost());
+					v.setId(o.getId());
+					v.setOrder_status(o.getOrder_status());
+					v.setPcost(o.getPcost());
+					v.setUid(orepo.getUseridForOrderId(o.getId()));
+					v.setQuantity(o.getQuantity());
+					v.setPname(o.getPname());
+					v.setAddress(user.getAddress());
+					result.add(v);
+					
+				}
 			}
 			return result;
 		}

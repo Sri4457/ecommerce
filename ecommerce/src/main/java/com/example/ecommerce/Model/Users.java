@@ -32,17 +32,19 @@ public class Users {
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<Orders> orders;
 	
+	@Column(name="address")
+	private String address;
 	
-	public Users(String username, String password, String status, String email) {
-		super();
-		this.username = username;
-		this.password = password;
-		this.userstatus = status;
-		this.email = email;
+	
+	
+	public String getAddress() {
+		return address;
 	}
 
-	public Users() {}
-	
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
 	public List<Orders> getOrders() {
 		return orders;
 	}

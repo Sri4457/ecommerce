@@ -90,7 +90,9 @@ public class UserServiceImpl implements UserInterface {
 		Users user=urepo.findByUsername(u.getUsername());
 		user.setEmail(u.getEmail());
 		user.setPassword(u.getPassword());
-		//user.setOrders(user.getOrders());
+		user.setAddress(u.getAddress());
+		
+		//user.setOrders(user.getOrders()); 
 		boolean b=false;
 		String msg=null;
 		try
@@ -210,7 +212,7 @@ public class UserServiceImpl implements UserInterface {
 						}
 					}
 					else {
-						msg+="Product"+o.getPname()+" is no more avaliable";
+						msg+="Product"+c.getProductname()+" is no more avaliable";
 						
 					}
 					crepo.deleteById(c.getId());

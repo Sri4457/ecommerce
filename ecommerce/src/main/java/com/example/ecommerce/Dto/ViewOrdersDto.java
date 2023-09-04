@@ -7,6 +7,7 @@ public class ViewOrdersDto {
 	private int quantity;
 	private double cost,pcost;
 	private long id;
+	private String address;
 	
 	public long getId() {
 		return id;
@@ -57,6 +58,12 @@ public class ViewOrdersDto {
 	}
 	public void setPcost(double pcost) {
 		this.pcost = pcost;
+	}
+	public String getAddress() {
+		return address;
+	}
+	public void setAddress(String address) {
+		this.address = address;
 	}
 	
 	
